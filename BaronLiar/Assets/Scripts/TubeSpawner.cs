@@ -9,23 +9,28 @@ public class TubeSpawner : MonoBehaviour
     private float _timer = 0;
     public GameObject _tube;
     public float height;
+
     void Start()
     {
-        GameObject _newTube = Instantiate(_tube);
-        _newTube.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
+        SpawnTube();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_timer > MaxTime)
         {
             GameObject _newTube = Instantiate(_tube);
             _newTube.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
-            Destroy(_newTube, 15);
+            Destroy(_newTube,10);
             _timer = 0;
         }
 
         _timer += Time.deltaTime;
+    }
+
+    private void SpawnTube()
+    {
+        GameObject newTube = Instantiate(_tube);
+        newTube.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
     }
 }

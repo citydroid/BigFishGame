@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
+//using UnityEngine.InputSystem;
 public class FlyBehavior : MonoBehaviour
 {
     [SerializeField] private float _velocity = 1f;
 
     private Rigidbody2D _rb;
-    public GameManager gameManager;
+    [SerializeField] public GameManager gameManager;
+    public Animator playerAnimator;
+  //  public GameObject playerObject;
+  //  Animator playerAction;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        playerAnimator = GetComponent<Animator>();
+      //  playerAction = playerObject.GetComponent<Animator>();
     }
 
 
@@ -28,9 +34,32 @@ public class FlyBehavior : MonoBehaviour
         }
         */
     }
-
+/*/
     private void OnCollisionEnter2D(Collision2D collision)
     {
         gameManager.GameOver();
+    }
+*/
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Fish"))
+        {
+           
+            Debug.Log("Collectible");
+            // Добавляем очко
+            Score.instance.UpdateScore();
+
+            // Уничтожаем объект
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.CompareTag("FishAnimation"))
+        {
+            playerAnimator.Play("PlayerEating");
+        }
+        else
+        {
+            // Если столкновение с другими объектами
+            gameManager.GameOver();
+        }
     }
 }
