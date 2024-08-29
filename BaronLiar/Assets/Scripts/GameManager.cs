@@ -13,8 +13,12 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        SceneManager.LoadScene("GameOverScene");
+        Time.timeScale = 0;
+        /*
         gameOverCanvas.SetActive(true);
         Time.timeScale = 0;
+        */
     }
 
     public void Replay()

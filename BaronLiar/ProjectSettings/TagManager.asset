@@ -6,7 +6,15 @@ TagManager:
   tags:
   - Collectible
   - FishAnimation
-  - Fish
+  - Fish_2
+  - Fish_10
+  - Fish_50
+  - Fish_150
+  - Fish_250
+  - Fish_375
+  - Fish_500
+  - Fish_1000
+  - Fish_1
   layers:
   - Default
   - TransparentFX
@@ -15,7 +23,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - PlayerLayer
   - 
   - 
   - 
@@ -43,4 +51,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: New Layer 1
+    uniqueID: 1297603413
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 1892043439
     locked: 0

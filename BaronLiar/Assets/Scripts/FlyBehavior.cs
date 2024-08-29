@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,39 +28,82 @@ public class FlyBehavior : MonoBehaviour
         {
             _rb.velocity = Vector2.up * _velocity;
         }
-        /*
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            _rb.velocity = Vector2.up * _velocity;
-        }
-        */
     }
-/*/
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        gameManager.GameOver();
-    }
-*/
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Fish"))
-        {
-           
-            Debug.Log("Collectible");
-            // Добавляем очко
-            Score.instance.UpdateScore();
-
-            // Уничтожаем объект
-            Destroy(collision.gameObject);
-        }
-        else if (collision.gameObject.CompareTag("FishAnimation"))
+        /*
+        if (collision.gameObject.CompareTag("FishAnimation"))
         {
             playerAnimator.Play("PlayerEating");
         }
+        */
+
+        playerAnimator.Play("PlayerEating");
+        int scoreAdd = 0;
+        int fishValue = 0;
+
+        if (collision.gameObject.CompareTag("Fish_2")) {
+            fishValue = 2;
+            scoreAdd = 1;
+        } else if (collision.gameObject.CompareTag("Fish_10")) {
+            fishValue = 10;
+            scoreAdd = 5;
+        } else if (collision.gameObject.CompareTag("Fish_50")) {
+            fishValue = 50;
+            scoreAdd = 10;
+        } else if (collision.gameObject.CompareTag("Fish_150")) {
+            fishValue = 150;
+            scoreAdd = 15;
+        } else if (collision.gameObject.CompareTag("Fish_250")) {
+            fishValue = 250;
+            scoreAdd = 22;
+        } else if (collision.gameObject.CompareTag("Fish_375")) {
+            fishValue = 375;
+            scoreAdd = 25;     
+         } else if (collision.gameObject.CompareTag("Fish_500")) {
+                    fishValue = 500;
+                    scoreAdd = 30;
+         } /*   else if (collision.gameObject.CompareTag("Fish_750")) {
+                    fishValue = 750;
+                    scoreAdd = 35;
+            } else if (collision.gameObject.CompareTag("Fish_1000")) {
+                    fishValue = 1000;
+                    scoreAdd = 40;
+            } else if (collision.gameObject.CompareTag("Fish_1500")) {
+                    fishValue = 1500;
+                    scoreAdd = 45;
+            } else if (collision.gameObject.CompareTag("Fish_2250")) {
+                    fishValue = 2250;
+                    scoreAdd = 60;
+
+
+           } else if (collision.gameObject.CompareTag("Fish_3000")) {
+                    fishValue = 3000;
+                    scoreAdd = 60;
+           } else if (collision.gameObject.CompareTag("Fish_4000")) {
+                    fishValue = 4000;
+                    scoreAdd = ;
+           } else if (collision.gameObject.CompareTag("Fish_5500")) {
+                    fishValue = 5500;
+                    scoreAdd = ;
+           } else if (collision.gameObject.CompareTag("Fish_7500")) {
+                    fishValue = 2250;
+                    scoreAdd = ;
+           } else if (collision.gameObject.CompareTag("Fish_10000")) {
+                    fishValue = 2250;
+                    scoreAdd = ;
+                }
+        */
+
+        if (Score.instance.GetScore() < fishValue) 
+        {
+            gameManager.GameOver();
+        }
         else
         {
-            // Если столкновение с другими объектами
-            gameManager.GameOver();
+            Score.instance.UpdateScore(scoreAdd);
+            Destroy(collision.gameObject);
         }
     }
 }

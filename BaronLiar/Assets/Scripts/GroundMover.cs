@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightMover : MonoBehaviour
+public class GroundMover : MonoBehaviour
 {
     public float _speed;
 

@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class TubeSpawner : MonoBehaviour
+public class LightsSpawner : MonoBehaviour
 {
     public float MaxTime = 1.0f;
     private float _timer = 0;
-    public GameObject _tube;
+    GameObject baseObject;
+    public GameObject _fish;
     public float height;
 
     void Start()
     {
+        baseObject = GameObject.Find("Base");
         SpawnTube();
     }
 
@@ -19,9 +21,7 @@ public class TubeSpawner : MonoBehaviour
     {
         if (_timer > MaxTime)
         {
-            GameObject _newTube = Instantiate(_tube);
-            _newTube.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
-            Destroy(_newTube,10);
+            SpawnTube();
             _timer = 0;
         }
 
@@ -30,7 +30,14 @@ public class TubeSpawner : MonoBehaviour
 
     private void SpawnTube()
     {
+        Vector3 position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
+
+        GameObject _newFish = Instantiate(_fish, position, Quaternion.identity);
+        _newFish.transform.SetParent(baseObject.transform, false);
+        /*
         GameObject newTube = Instantiate(_tube);
         newTube.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
+        */
+        Destroy(_newFish, 10);
     }
 }

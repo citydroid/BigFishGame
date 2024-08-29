@@ -6,7 +6,7 @@ using TMPro;
 public class Score : MonoBehaviour
 {
     public static Score instance;
-    private int _score;
+    private int _score = 5;
 
     [SerializeField] private TextMeshProUGUI _currentScoreText;
     [SerializeField] private TextMeshProUGUI _highScoreText;
@@ -34,10 +34,14 @@ public class Score : MonoBehaviour
         }
     }
 
-    public void UpdateScore()
+    public void UpdateScore(int value)
     {
-        _score++;
+        _score += value;
         _currentScoreText.text = _score.ToString();
         UpdateHighScore();
+    }
+    public int GetScore()
+    {
+        return _score;
     }
 }
