@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartNewGame : MonoBehaviour
+public class RespawnButton : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void ShowAdv();
     void OnMouseDown()
     {
         // Действие при клике на спрайт
@@ -16,7 +19,8 @@ public class StartNewGame : MonoBehaviour
 
     void PerformAction()
     {
-        SceneManager.LoadScene(0);
+       // ShowAdv();
+        SceneManager.LoadScene(1);
     }
 
     void OnMouseEnter()
@@ -29,5 +33,11 @@ public class StartNewGame : MonoBehaviour
     {
         // Возвращение к исходному цвету
         GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    void AdYandex(int value)
+    {
+        // Возвращение к исходному цвету
+        GetComponent<SpriteRenderer>().color = Color.black;
     }
 }

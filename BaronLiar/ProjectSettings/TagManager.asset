@@ -15,6 +15,7 @@ TagManager:
   - Fish_500
   - Fish_1000
   - Fish_1
+  - Bottom
   layers:
   - Default
   - TransparentFX

@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 public class GameManager : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void ShowAdv();
+
     public GameObject gameOverCanvas;
 
     public void Start()
@@ -13,7 +17,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        SceneManager.LoadScene("GameOverScene");
+        SceneManager.LoadScene("2_GameOverScene");
         Time.timeScale = 0;
         /*
         gameOverCanvas.SetActive(true);
@@ -23,6 +27,10 @@ public class GameManager : MonoBehaviour
 
     public void Replay()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
+    }
+    public void ShowAdvMethod()
+    {
+        ShowAdv();
     }
 }
