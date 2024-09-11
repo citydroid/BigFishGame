@@ -1,2 +1,2 @@
-# Baron_Liar_game
+# BigFishGame
 Unity WebGL game project.
