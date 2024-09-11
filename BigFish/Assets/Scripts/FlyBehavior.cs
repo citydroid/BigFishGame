@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-//using UnityEngine.InputSystem;
+
 public class FlyBehavior : MonoBehaviour
 {
     [SerializeField] private float _velocity = 1f;
@@ -13,53 +13,41 @@ public class FlyBehavior : MonoBehaviour
     private Transform _tr;
     [SerializeField] public GameManager gameManager;
     public Animator playerAnimator;
-    //  public GameObject playerObject;
-    // Animator playerAction;
 
     public GameObject deadPrefab;
     public float destroyDelay = 1f;  // Время, через которое уничтожается объект 2
 
     private Vector2 moveVector;
 
+    bool playGame = true;
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _tr = GetComponent<Transform>();
         playerAnimator = GetComponent<Animator>();
-      //  playerAction = playerObject.GetComponent<Animator>();
     }
 
 
     void Update()
-    { /*
-        moveVector.x = Input.GetAxis("Horizontal");
-        moveVector.y = Input.GetAxis("Vertical");
-        _rb.MovePosition(_rb.position + moveVector * _velocity * Time.deltaTime);
-        */
-        Debug.Log("hjh " + _rb.velocity);
-        if (Input.GetMouseButtonDown(0))
+    {
+        if (playGame)
         {
-            _rb.velocity = Vector2.up * _velocity;
-            //Debug.Log("hjh " + _rb.velocity);
-        }
+            if (Input.GetMouseButtonDown(0))
+            {
+                _rb.velocity = Vector2.up * _velocity;
+                //Debug.Log("hjh " + _rb.velocity);
+            }
 
-        if (_tr.position.y <= -1.1)
-        {
-            _rb.velocity = Vector2.up;
+            if (_tr.position.y <= -1.1)
+            {
+                _rb.velocity = Vector2.up;
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        /*
-        if (collision.gameObject.CompareTag("FishAnimation"))
-        {
-            playerAnimator.Play("PlayerEating");
-        }
-        */
-
-
-        playerAnimator.Play("PlayerEating");
         int scoreAdd = 0;
         int fishValue = 0;
 
@@ -129,17 +117,26 @@ public class FlyBehavior : MonoBehaviour
              scoreAdd = 100;
         }
         */
+            else
+        {
+            // Если объект не из списка, выходим из метода и не создаем newObject2
+            return;
+        }
+
+
+
 
         if (Score.instance.GetScore() < fishValue) 
         {
-            gameManager.GameOver();
+            playGame = false;
+            playerAnimator.Play("PlayerDead");
+            //StartCoroutine(GameOverAfterAnimation());
         }
         else
-        {
+        {   
+            playerAnimator.Play("PlayerEating");
             Score.instance.UpdateScore(scoreAdd);
             Destroy(collision.gameObject);
-
-            //playerAnimator.Play("PlayerFlash");
 
             Transform trans = collision.gameObject.GetComponent<Transform>();
             Vector3 spawnPosition = trans.position;
@@ -158,6 +155,23 @@ public class FlyBehavior : MonoBehaviour
 
 
     }
+    private IEnumerator GameOverAfterAnimation()
+    {
+        //playerAnimator.Play("PlayerDead");
 
+        // Получаем длительность текущей анимации
+        AnimatorStateInfo animationState = playerAnimator.GetCurrentAnimatorStateInfo(0);
+        float animationDuration = animationState.length;
 
+        // Ждем окончания анимации
+        yield return new WaitForSeconds(animationDuration);
+
+        // Теперь вызываем GameOver
+        gameManager.GameOver();
+    }
+
+    public void GameOverPlayer()
+    {
+        gameManager.GameOver();
+    }
 }
