@@ -50,7 +50,10 @@ public class FlyBehavior : MonoBehaviour
         int scoreAdd = 0;
         int fishValue = 0;
 
-        if (collision.gameObject.CompareTag("Fish_2"))   {
+    //    if (TryGetFishValue(collision.gameObject.tag, out fishValue, out scoreAdd))
+        
+
+            if (collision.gameObject.CompareTag("Fish_2"))   {
             fishValue = 2;
             scoreAdd = 1;
         }
@@ -141,13 +144,6 @@ public class FlyBehavior : MonoBehaviour
             Vector3 spawnPosition = trans.position;
             GameObject newObject2 = Instantiate(deadPrefab, spawnPosition, Quaternion.identity);
 
-            // Проигрываем анимацию (если требуется)
-            /*Animator animator = newObject2.GetComponent<Animator>();
-            if (animator != null)
-            {
-                animator.Play("AnimationName"); // Замените "AnimationName" на название вашей анимации
-            }*/
-
             // Уничтожаем Объект 2 через определённое время
             Destroy(newObject2, destroyDelay);
         }
@@ -158,5 +154,44 @@ public class FlyBehavior : MonoBehaviour
     public void GameOverPlayer()
     {
         gameManager.GameOver();
+    }
+
+    private bool TryGetFishValue(string tag, out int fishValue, out int scoreAdd)
+    {
+        switch (tag)
+        {
+            case "Fish_2":
+                fishValue = 2;
+                scoreAdd = 1;
+                return true;
+            case "Fish_10":
+                fishValue = 10;
+                scoreAdd = 5;
+                return true;
+            case "Fish_50":
+                fishValue = 50;
+                scoreAdd = 10;
+                return true;
+            case "Fish_150":
+                fishValue = 150;
+                scoreAdd = 15;
+                return true;
+            case "Fish_250":
+                fishValue = 250;
+                scoreAdd = 22;
+                return true;
+            case "Fish_375":
+                fishValue = 375;
+                scoreAdd = 25;
+                return true;
+            case "Fish_500":
+                fishValue = 500;
+                scoreAdd = 30;
+                return true;
+            default:
+                fishValue = 0;
+                scoreAdd = 0;
+                return false;
+        }
     }
 }

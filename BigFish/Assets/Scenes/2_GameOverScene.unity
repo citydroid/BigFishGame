@@ -123,6 +123,55 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &150213997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 150213999}
+  - component: {fileID: 150213998}
+  m_Layer: 0
+  m_Name: Progress
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &150213998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150213997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9ec6e947e266694b8365dde65b3e413, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInfoText: {fileID: 0}
+  PlayerInfo:
+    Speed: 0
+    Gold: 0
+    Level: 0
+--- !u!4 &150213999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150213997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.091842875, y: 0.17007515, z: 0.09046894}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389687828
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28e125c3e7fd21146b331469c1df1f39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _nameText: {fileID: 0}
 --- !u!4 &389687830
 Transform:
   m_ObjectHideFlags: 0
@@ -489,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724faf26507a2e4aa06d972ed85a05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverCanvas: {fileID: 0}
+  _level: 1
 --- !u!4 &632014860
 Transform:
   m_ObjectHideFlags: 0
@@ -628,7 +678,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 389687829}
         m_TargetAssemblyTypeName: Yandex, Assembly-CSharp
-        m_MethodName: HelloCall
+        m_MethodName: RevardAdv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

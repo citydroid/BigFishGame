@@ -6,15 +6,6 @@ using System.Runtime.InteropServices;
 
 public class GameManager : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void ShowAdv();
-
-    [DllImport("__Internal")]
-
-    private static extern void RewardedAdv();
-    public GameObject gameOverCanvas;
-
-
     [SerializeField] private int _level = 1;
 
     public void Start()
@@ -27,10 +18,6 @@ public class GameManager : MonoBehaviour
         Score.instance.UpdateGold();
         SceneManager.LoadScene("2_GameOverScene");
         Time.timeScale = 0;
-        /*
-        gameOverCanvas.SetActive(true);
-        Time.timeScale = 0;
-        */
     }
 
     public void NextLevel()
@@ -39,23 +26,7 @@ public class GameManager : MonoBehaviour
         Progress.Instance.PlayerInfo.Level = _level;
     }
 
-
-
     public void Replay()
-    {
-        SceneManager.LoadScene(1);
-    }
-
-
-
-    //Для показа банера
-    public void ShowAdvMethod()
-    {
-        ShowAdv();
-    }
-
-    //Запуск после вознаграждения
-    public void AfterAdvAction()
     {
         SceneManager.LoadScene(1);
     }

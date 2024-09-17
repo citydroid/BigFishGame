@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class RespawnButton : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void RewardedAdv();
+
     void OnMouseDown()
     {
         //Вызов рекламы за вознаграждение Яндекс 
-        RewardedAdv();
+        Yandex.Instance.RevardAdv();
+        //После рекламы вызывается Yandex.Instance.AfterAdvAction();
     }
     void OnMouseEnter()
     {

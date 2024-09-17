@@ -15,13 +15,6 @@ public class PlayerInfo
 
     public class Progress : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void SaveExtern(string date);
-
-    [DllImport("__Internal")]
-
-    private static extern void LoadExtern();
-
     [SerializeField] TextMeshProUGUI _playerInfoText;
 
     public PlayerInfo PlayerInfo;
@@ -35,8 +28,9 @@ public class PlayerInfo
             transform.parent = null;
             DontDestroyOnLoad(gameObject);
             Instance = this;
+
             //«агрузка параметров игрока (здесь не должна быть)
-            //LoadExtern();
+            //Yandex.Instance.LoadParam();
         }
         else
         {
@@ -45,16 +39,18 @@ public class PlayerInfo
     }
 
 
-    public void Save()
-    {
-        string jsonString = JsonUtility.ToJson(PlayerInfo);
-        SaveExtern(jsonString);
-    }
-
     public void SetPlayerInfo(string value)
     {
         PlayerInfo = JsonUtility.FromJson<PlayerInfo>(value);
         _playerInfoText.text = PlayerInfo.Speed + "\n" + PlayerInfo.Gold + "\n" + PlayerInfo.Level;
     }
+
+    public void SavePlayerInfo()
+    {
+        string jsonString = JsonUtility.ToJson(PlayerInfo);
+        Yandex.Instance.SaveParam(jsonString);
+    }
+
+
 
 }

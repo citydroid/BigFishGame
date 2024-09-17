@@ -20,8 +20,9 @@ public class ProgressSceneButton : MonoBehaviour
         ///TO DO Обнуляет все очки. Перенести!!
         Score.instance.Obnulit();
         /////////////////////////////////////
-        ///
-        Progress.Instance.Save();
+
+        //Progress.Instance.SavePlayerInfo();
+
         SceneManager.LoadScene(3);
     }
 

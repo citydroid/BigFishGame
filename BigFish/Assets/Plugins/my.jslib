@@ -9,6 +9,13 @@ mergeInto(LibraryManager.library, {
     window.alert(UTF8ToString(str));
   },
   
+  GiveMePlayerData: function() {
+	console.log(player.getName());
+	SendMessage('Yandex','SetName', player.getName());
+  },
+  
+  
+  
   ShowAdv: function(){
 	ysdk.adv.showFullscreenAdv({
 		callbacks: {
@@ -31,7 +38,7 @@ mergeInto(LibraryManager.library, {
 			},
 			onRewarded: () => {
 			  console.log('Rewarded!');
-			  SendMessage('GameManager','AfterAdvAction');
+			  SendMessage('Yandex','AfterAdvAction');
 			},
 			onClose: () => {
 			  console.log('Video ad closed.');
