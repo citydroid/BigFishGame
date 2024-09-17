@@ -23,7 +23,7 @@ mergeInto(LibraryManager.library, {
 	})
   },
   
-  RewardedAdv: function(value){
+  RewardedAdv: function(){
 	ysdk.adv.showRewardedVideo({
 		callbacks: {
 			onOpen: () => {
@@ -31,7 +31,7 @@ mergeInto(LibraryManager.library, {
 			},
 			onRewarded: () => {
 			  console.log('Rewarded!');
-			  myGameInstance.SendMessage("PlayerGameOver","AdYandex",value);
+			  SendMessage('GameManager','AfterAdvAction');
 			},
 			onClose: () => {
 			  console.log('Video ad closed.');
@@ -43,4 +43,18 @@ mergeInto(LibraryManager.library, {
 	})
   },
 
+
+  SaveExtern: function(date){
+	  var dateString = UTF8ToString(date);
+	  var myobj = JSON.parse(dateString);
+	  player.setData(myobj);
+  },  
+  
+  LoadExtern: function(){
+	  player.getData().then(_date => {
+		  const myJSON = JSON.stringify(_date);
+		  SendMessage('Progress', 'SetPlayerInfo', myJSON);
+	  });
+  },  
+  
 });

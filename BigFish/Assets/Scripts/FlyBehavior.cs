@@ -36,12 +36,11 @@ public class FlyBehavior : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 _rb.velocity = Vector2.up * _velocity;
-                //Debug.Log("hjh " + _rb.velocity);
             }
 
-            if (_tr.position.y <= -1.1)
+            if (_tr.position.y <= -1f)
             {
-                _rb.velocity = Vector2.up;
+                _rb.velocity = Vector2.up * 1.5f;
             }
         }
     }
@@ -154,20 +153,6 @@ public class FlyBehavior : MonoBehaviour
         }
 
 
-    }
-    private IEnumerator GameOverAfterAnimation()
-    {
-        //playerAnimator.Play("PlayerDead");
-
-        // Получаем длительность текущей анимации
-        AnimatorStateInfo animationState = playerAnimator.GetCurrentAnimatorStateInfo(0);
-        float animationDuration = animationState.length;
-
-        // Ждем окончания анимации
-        yield return new WaitForSeconds(animationDuration);
-
-        // Теперь вызываем GameOver
-        gameManager.GameOver();
     }
 
     public void GameOverPlayer()

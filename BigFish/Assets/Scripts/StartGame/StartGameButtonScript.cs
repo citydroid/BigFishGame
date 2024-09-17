@@ -4,15 +4,18 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RespawnButton : MonoBehaviour
+public class StartGameButtonScript : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void RewardedAdv();
     void OnMouseDown()
     {
-        //Вызов рекламы за вознаграждение Яндекс 
-        RewardedAdv();
+        PerformAction();
     }
+
+    void PerformAction()
+    {
+        SceneManager.LoadScene(1);
+    }
+
     void OnMouseEnter()
     {
         // Изменение цвета спрайта при наведении курсора

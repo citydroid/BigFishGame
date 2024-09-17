@@ -6,42 +6,33 @@ using UnityEngine.UIElements;
 
 public class FishSpawner : MonoBehaviour
 {
-    public float MaxTime = 1.0f;
-    private float _timer = 0;
-    private GameObject baseObject;
-    public GameObject _fish;
-    public float height;
+    [SerializeField] private float maxTime = 1.0f;
+    [SerializeField] private GameObject fishPrefab;
+    [SerializeField] private float height;
 
+    private float _timer = 0f;
+    private GameObject _baseObject;
     void Start()
     {
-        baseObject = GameObject.Find("Base");
+        _baseObject = GameObject.Find("Base");
         SpawnTube();
     }
 
     void Update()
     {
-        if (_timer > MaxTime)
+        _timer += Time.deltaTime;
+        if (_timer > maxTime)
         {
             SpawnTube();
             _timer = 0;
         }
-
-        _timer += Time.deltaTime;
     }
 
     private void SpawnTube()
     {
-
         Vector3 position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
 
-        GameObject _newFish = Instantiate(_fish, position, Quaternion.identity);
-        _newFish.transform.SetParent(baseObject.transform, false);
-
-        /*
-        GameObject newFish = Instantiate(_fish);
-         newFish.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
-        */
-
-         Destroy(_newFish, 10);
+        GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);
+        newFish.transform.SetParent(_baseObject.transform, false);
     }
 }

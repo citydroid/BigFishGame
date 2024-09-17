@@ -41,11 +41,6 @@ public class GroundSpawner : MonoBehaviour
 
         GameObject _newFish = Instantiate(_fish, position, Quaternion.identity);
         _newFish.transform.SetParent(baseObject.transform, false);
-        /*
-        GameObject newFish = Instantiate(_fish);
-        newFish.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
-        */
 
-        Destroy(_newFish, 10);
     }
 }

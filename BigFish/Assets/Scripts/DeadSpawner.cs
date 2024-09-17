@@ -10,10 +10,10 @@ public class DeadSpawner : MonoBehaviour
     // Этот метод вызывается для создания объекта и его уничтожения
     public void SpawnAndDestroy(Vector3 spawnPosition)
     {
-        // Создаём объект 2 (например, рыбу)
+        // Создаём объект при поедании
         GameObject _newFish = Instantiate(_fish, spawnPosition, Quaternion.identity);
 
-        // Если нужно проиграть анимацию на объекте
+        // Анимация включается
         Animator animator = _newFish.GetComponent<Animator>();
         if (animator != null)
         {
