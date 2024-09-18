@@ -138,7 +138,22 @@ public class FlyBehavior : MonoBehaviour
         {   
             playerAnimator.Play("PlayerEating");
             Score.instance.UpdateScore(scoreAdd);
-            Destroy(collision.gameObject);
+
+            Transform textTransform = collision.gameObject.transform.Find("Red");
+            GameObject valueObject = textTransform.gameObject;
+            if (valueObject != null)
+            {
+                valueObject.SetActive(false);
+            }
+/*
+            Transform fishObject = collision.gameObject.transform.Find("Fish");
+            if (fishObject != null)
+            {
+                SpriteRenderer spriteRenderer = fishObject.GetComponent<SpriteRenderer>();
+                spriteRenderer.enabled = false;
+            }
+*/
+             Destroy(collision.gameObject);
 
             Transform trans = collision.gameObject.GetComponent<Transform>();
             Vector3 spawnPosition = trans.position;
@@ -155,7 +170,29 @@ public class FlyBehavior : MonoBehaviour
     {
         gameManager.GameOver();
     }
+    private void FindAllFishAndRedObjects()
+    {
+        // Находим все объекты на сцене с тегом "Fish_10"
+        GameObject[] fishObjects = GameObject.FindGameObjectsWithTag("Fish_10");
 
+        foreach (GameObject fish in fishObjects)
+        {
+            // Ищем дочерний объект с именем "Red" в каждом найденном объекте с тегом "Fish_10"
+            Transform redTransform = fish.transform.Find("Red");
+
+            if (redTransform != null)
+            {
+                GameObject redObject = redTransform.gameObject;
+
+                // Выполняем какие-либо действия с объектом "Red"
+                Debug.Log("Найден объект 'Red' в " + fish.name);
+            }
+            else
+            {
+                Debug.LogWarning("'Red' не найден в объекте " + fish.name);
+            }
+        }
+    }
     private bool TryGetFishValue(string tag, out int fishValue, out int scoreAdd)
     {
         switch (tag)

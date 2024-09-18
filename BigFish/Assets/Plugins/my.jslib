@@ -16,6 +16,14 @@ mergeInto(LibraryManager.library, {
   
   
   
+  GetLeader: function(){
+	  ysdk.getLeaderboards()
+	  .then(lb => lb.getLeaderboardDescription('leaderboard2021'))
+	  .then(res => console.log(res));
+  },
+  
+  
+  
   ShowAdv: function(){
 	ysdk.adv.showFullscreenAdv({
 		callbacks: {
