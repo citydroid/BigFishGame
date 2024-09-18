@@ -435,10 +435,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fb08261e8ffb7f49b6d8f4cf40ae0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTime: 1
+  maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: f3d1ec35277ee3c4495b8f587d51db03, type: 3}
   height: 0.5
   spawnCount: 1
+  isWhite: 0
 --- !u!1 &389653018
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,6 +910,7 @@ MonoBehaviour:
   fishPrefab: {fileID: 2088638961300481797, guid: 277a0bf99c1cdb246b7dec6b61b1623c, type: 3}
   height: 0.5
   spawnCount: 1
+  isWhite: 0
 --- !u!1 &882217098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1491,9 +1493,7 @@ MonoBehaviour:
   fishSpawner_10: {fileID: 879224427}
   fishSpawner_50: {fileID: 382107689}
   _level: 1
-  scoreThreshold_1: 10
-  scoreThreshold_2: 20
-  scoreThreshold_3: 40
+  scoreThreshold: 000000000a0000003200000064000000
 --- !u!4 &1150426556
 Transform:
   m_ObjectHideFlags: 0
@@ -2828,6 +2828,7 @@ MonoBehaviour:
   fishPrefab: {fileID: 2106205615396271955, guid: 5f6dbb57be94e9c448d69644ee2a96e7, type: 3}
   height: 0.5
   spawnCount: 1
+  isWhite: 1
 --- !u!4 &2037402595
 Transform:
   m_ObjectHideFlags: 0
