@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,26 +9,30 @@ using UnityEngine.UI;
 public class FlyBehavior : MonoBehaviour
 {
     [SerializeField] private float _velocity = 1f;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject deadPrefab;
+    [SerializeField] private float destroyDelay = 1f;  // Время, через которое уничтожается объект 2
+    [SerializeField] private int currentLevel = 1; // Текущий уровень
+    [SerializeField] private int nextFishValue; // Следующее значение fishValue для уровня
+
 
     private Rigidbody2D _rb;
     private Transform _tr;
-    [SerializeField] public GameManager gameManager;
-    public Animator playerAnimator;
+    private Animator playerAnimator;
+    private FishCollider fishCollider;
 
-    public GameObject deadPrefab;
-    public float destroyDelay = 1f;  // Время, через которое уничтожается объект 2
-
-    private Vector2 moveVector;
-
-    bool playGame = true;
+    private bool playGame = true;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _tr = GetComponent<Transform>();
         playerAnimator = GetComponent<Animator>();
-    }
+        fishCollider = GetComponent<FishCollider>();  // Получаем ссылку на компонент FishCollider
 
+        // Инициализация начального значения fishValue для первого уровня
+  //     nextFishValue = FishCollider.GetFishValueForLevel(currentLevel);
+    }
 
     void Update()
     {
@@ -42,193 +47,91 @@ public class FlyBehavior : MonoBehaviour
             {
                 _rb.velocity = Vector2.up * 1.5f;
             }
+
+            // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
+            if (Score.instance.GetScore() >= nextFishValue)
+            {
+                // Скрываем объекты "Red" для всех рыб текущего уровня
+                HideRedObjectsIfScoreMet(nextFishValue);
+
+                // Переходим на следующий уровень
+                currentLevel++;
+                // Обновляем следующее значение fishValue для нового уровня
+          //      nextFishValue = FishCollider.GetFishValueForLevel(currentLevel);
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        int scoreAdd = 0;
-        int fishValue = 0;
+        int scoreAdd;
+        int fishValue;
 
-    //    if (TryGetFishValue(collision.gameObject.tag, out fishValue, out scoreAdd))
-        
-
-            if (collision.gameObject.CompareTag("Fish_2"))   {
-            fishValue = 2;
-            scoreAdd = 1;
-        }
-        else if (collision.gameObject.CompareTag("Fish_10"))   {
-            fishValue = 10;
-            scoreAdd = 5;
-        }
-        else if (collision.gameObject.CompareTag("Fish_50"))   {
-            fishValue = 50;
-            scoreAdd = 10;
-        }
-        else if (collision.gameObject.CompareTag("Fish_150"))  {
-            fishValue = 150;
-            scoreAdd = 15;
-        }
-        else if (collision.gameObject.CompareTag("Fish_250"))  {
-            fishValue = 250;
-            scoreAdd = 22;
-        }
-        else if (collision.gameObject.CompareTag("Fish_375"))  {
-            fishValue = 375;
-            scoreAdd = 25;
-        }
-        else if (collision.gameObject.CompareTag("Fish_500"))  {
-            fishValue = 500;
-            scoreAdd = 30;
-        }
-        /*
-        else if (collision.gameObject.CompareTag("Fish_750"))  {
-            fishValue = 750;
-            scoreAdd = 35;
-        }
-        else if (collision.gameObject.CompareTag("Fish_1000")) {
-            fishValue = 1000;
-            scoreAdd = 40;
-        }
-        else if (collision.gameObject.CompareTag("Fish_1500")) {
-            fishValue = 1500;
-            scoreAdd = 45;
-        }
-        else if (collision.gameObject.CompareTag("Fish_2250")) {
-            fishValue = 2250;
-            scoreAdd = 50;
-        }
-        else if (collision.gameObject.CompareTag("Fish_3000")) {
-            fishValue = 3000;
-            scoreAdd = 60;
-        }
-        else if (collision.gameObject.CompareTag("Fish_4000")) {
-            fishValue = 4000;
-            scoreAdd = 70;
-        }       
-        else if (collision.gameObject.CompareTag("Fish_5500")) {
-             fishValue = 5500;
-             scoreAdd = 80;
-        }
-        else if (collision.gameObject.CompareTag("Fish_7500")) {
-             fishValue = 7500;
-             scoreAdd = 90;
-        }
-        else if (collision.gameObject.CompareTag("Fish_10000")) {
-             fishValue = 10000;
-             scoreAdd = 100;
-        }
-        */
-            else
+        // Используем новый класс FishCollider для проверки рыб
+        if (!fishCollider.TryGetFishValue(collision.gameObject.tag, out fishValue, out scoreAdd))
         {
-            // Если объект не из списка, выходим из метода и не создаем newObject2
+            // Если это не рыба, выходим из метода
             return;
         }
 
-
-
-
-        if (Score.instance.GetScore() < fishValue) 
+        if (Score.instance.GetScore() < fishValue)
         {
             playGame = false;
             playerAnimator.Play("PlayerDead");
-            //StartCoroutine(GameOverAfterAnimation());
         }
         else
-        {   
+        {
             playerAnimator.Play("PlayerEating");
             Score.instance.UpdateScore(scoreAdd);
 
-            Transform textTransform = collision.gameObject.transform.Find("Red");
-            GameObject valueObject = textTransform.gameObject;
-            if (valueObject != null)
-            {
-                valueObject.SetActive(false);
-            }
-/*
-            Transform fishObject = collision.gameObject.transform.Find("Fish");
-            if (fishObject != null)
-            {
-                SpriteRenderer spriteRenderer = fishObject.GetComponent<SpriteRenderer>();
-                spriteRenderer.enabled = false;
-            }
-*/
-             Destroy(collision.gameObject);
+            // Уничтожаем столкнувшийся объект
+            Destroy(collision.gameObject);
 
-            Transform trans = collision.gameObject.GetComponent<Transform>();
-            Vector3 spawnPosition = trans.position;
+            // Создаем "мертвый" объект (deadPrefab) на месте уничтоженной рыбы
+            Vector3 spawnPosition = collision.gameObject.transform.position;
             GameObject newObject2 = Instantiate(deadPrefab, spawnPosition, Quaternion.identity);
 
-            // Уничтожаем Объект 2 через определённое время
+            UpdateDeadText(newObject2, scoreAdd);
+
+            // Уничтожаем новый объект через определенное время
             Destroy(newObject2, destroyDelay);
         }
+    }
 
+    private void UpdateDeadText(GameObject deadObject, int scoreAdd)
+    {
+        DeadScore deadScore = deadObject.GetComponent<DeadScore>();
 
+        if (deadScore != null)
+        {
+            deadScore.ScoreValue(scoreAdd);
+        }
+        else
+        {
+            Debug.LogWarning("Компонент DeadScore не найден на объекте: " + deadObject.name);
+        }
     }
 
     public void GameOverPlayer()
     {
         gameManager.GameOver();
     }
-    private void FindAllFishAndRedObjects()
+    private void HideRedObjectsIfScoreMet(int fishValue)
     {
-        // Находим все объекты на сцене с тегом "Fish_10"
-        GameObject[] fishObjects = GameObject.FindGameObjectsWithTag("Fish_10");
+        // Логика для скрытия объектов "Red" (тот же метод, что был выше)
+        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishValue}");
 
-        foreach (GameObject fish in fishObjects)
+        foreach (GameObject fish in allFishObjects)
         {
-            // Ищем дочерний объект с именем "Red" в каждом найденном объекте с тегом "Fish_10"
-            Transform redTransform = fish.transform.Find("Red");
-
-            if (redTransform != null)
+            if (Score.instance.GetScore() >= fishValue)
             {
-                GameObject redObject = redTransform.gameObject;
-
-                // Выполняем какие-либо действия с объектом "Red"
-                Debug.Log("Найден объект 'Red' в " + fish.name);
+                Transform redTransform = fish.transform.Find("Red");
+                if (redTransform != null)
+                {
+                    GameObject redObject = redTransform.gameObject;
+                    redObject.SetActive(false);
+                }
             }
-            else
-            {
-                Debug.LogWarning("'Red' не найден в объекте " + fish.name);
-            }
-        }
-    }
-    private bool TryGetFishValue(string tag, out int fishValue, out int scoreAdd)
-    {
-        switch (tag)
-        {
-            case "Fish_2":
-                fishValue = 2;
-                scoreAdd = 1;
-                return true;
-            case "Fish_10":
-                fishValue = 10;
-                scoreAdd = 5;
-                return true;
-            case "Fish_50":
-                fishValue = 50;
-                scoreAdd = 10;
-                return true;
-            case "Fish_150":
-                fishValue = 150;
-                scoreAdd = 15;
-                return true;
-            case "Fish_250":
-                fishValue = 250;
-                scoreAdd = 22;
-                return true;
-            case "Fish_375":
-                fishValue = 375;
-                scoreAdd = 25;
-                return true;
-            case "Fish_500":
-                fishValue = 500;
-                scoreAdd = 30;
-                return true;
-            default:
-                fishValue = 0;
-                scoreAdd = 0;
-                return false;
         }
     }
 }
