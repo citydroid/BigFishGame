@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private FishSpawner fishSpawner_2;
     [SerializeField] private FishSpawner fishSpawner_2;
  */
-    [SerializeField] private int _level = 1; 
     [SerializeField] private int[] scoreThreshold = new int[]
     {
         0,
@@ -29,6 +28,39 @@ public class GameManager : MonoBehaviour
     private readonly bool[] hasIncreasedSpawn =  new bool[] { false, false, false, false };
 
     private bool _isSceneChanging = false;
+
+
+
+    private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
+    {
+        { "Fish_2", (2, 1) },
+        { "Fish_10", (10, 5) },
+        { "Fish_50", (50, 10) },
+        { "Fish_150", (150, 15) },
+        { "Fish_250", (250, 22) },
+        { "Fish_375", (375, 25) },
+        { "Fish_500", (500, 30) }
+        // Можно добавить другие рыбы по аналогии
+    };
+
+
+    // Fish Value и ScoreAdd для каждого уровня
+    private Dictionary<int, int> fishValueForLevel = new Dictionary<int, int>
+    {
+        { 1, 2 },
+        { 2, 10 },
+        { 3, 50 }
+    };
+
+    private Dictionary<int, int> scoreAddForLevel = new Dictionary<int, int>
+    {
+        { 1, 1 },
+        { 2, 5 },
+        { 3, 10 }
+    };
+    private int currentScore;
+    private int currentLevel = 1;
+
     public void Start()
     {
         Time.timeScale = 1.0f;
@@ -48,9 +80,19 @@ public class GameManager : MonoBehaviour
             return;  // Останавливаем выполнение, если сцена меняется
         }
 
-        int currentScore = Score.instance.GetScore();
+        currentScore = Score.instance.GetScore();
 
         IsWhiteChanger(currentScore);
+
+        // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
+        if (currentScore >= scoreThreshold[currentLevel])
+        {
+            // Скрываем объекты "Red" для всех рыб текущего уровня
+            HideRedObjectsIfScoreMet(scoreThreshold[currentLevel]);
+            // Переходим на следующий уровень
+            NextLevel();
+        }
+
 
         if (currentScore >= scoreThreshold[1] && !hasIncreasedSpawn[1])
         {
@@ -65,6 +107,24 @@ public class GameManager : MonoBehaviour
             Level_3();
         }
     }
+    private void HideRedObjectsIfScoreMet(int fishValue)
+    {
+        // Логика для скрытия объектов "Red"
+        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishValue}");
+
+        foreach (GameObject fish in allFishObjects)
+        {
+            if (Score.instance.GetScore() >= fishValue)
+            {
+                Transform redTransform = fish.transform.Find("Red");
+                if (redTransform != null)
+                {
+                    GameObject redObject = redTransform.gameObject;
+                    redObject.SetActive(false);
+                }
+            }
+        }
+    }
     public void GameOver()
     {
         Score.instance.UpdateGold();
@@ -74,8 +134,8 @@ public class GameManager : MonoBehaviour
 
     public void NextLevel()
     {
-        _level++;
-        Progress.Instance.PlayerInfo.Level = _level;
+        currentLevel++;
+        Progress.Instance.PlayerInfo.Level = currentLevel;
     }
 
     public void Replay()
@@ -94,6 +154,21 @@ public class GameManager : MonoBehaviour
             isWhiteDo[3] = true;
         }
     }
+
+    public bool TryGetFishValue(string fishTag, out int fishValue, out int scoreAdd)
+    {
+        if (fishValues.TryGetValue(fishTag, out var values))
+        {
+            fishValue = values.fishValue;
+            scoreAdd = values.scoreAdd;
+            return true;
+        }
+
+        fishValue = 0;
+        scoreAdd = 0;
+        return false;
+    }
+
 
     private void Level_1()
     {
