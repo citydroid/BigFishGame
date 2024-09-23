@@ -50,32 +50,29 @@ public class FlyBehavior : MonoBehaviour
 
         if (playGame)
         {
-            // Используем новый класс FishCollider для проверки рыб
+            // Используем GameManager для проверки в библиотеке рыб
             if (!gameManager.TryGetFishValue(collision.gameObject.tag, out fishValue, out scoreAdd))
             {
-                // Если это не рыба, выходим из метода
-                return;
+                return;// Если это не рыба, выходим из метода
             }
 
             if (Score.instance.GetScore() < fishValue)
             {
-                playGame = false;
+                playGame = false; // Выключаем возможность collision с другими объектами
                 playerAnimator.Play("PlayerDead");
             }
             else
             {
                 playerAnimator.Play("PlayerEating");
                 Score.instance.UpdateScore(scoreAdd);
-
                 // Уничтожаем столкнувшийся объект
                 Destroy(collision.gameObject);
 
                 // Создаем "мертвый" объект (deadPrefab) на месте уничтоженной рыбы
                 Vector3 spawnPosition = collision.gameObject.transform.position;
                 GameObject newObject2 = Instantiate(deadPrefab, spawnPosition, Quaternion.identity);
-
+                // Добавляем на объект (deadPrefab) количество заработанных очков
                 UpdateDeadText(newObject2, scoreAdd);
-
                 // Уничтожаем новый объект через определенное время
                 Destroy(newObject2, destroyDelay);
             }
@@ -89,10 +86,6 @@ public class FlyBehavior : MonoBehaviour
         if (deadScore != null)
         {
             deadScore.ScoreValue(scoreAdd);
-        }
-        else
-        {
-            Debug.LogWarning("Компонент DeadScore не найден на объекте: " + deadObject.name);
         }
     }
 

@@ -1575,10 +1575,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724faf26507a2e4aa06d972ed85a05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishSpawner_2: {fileID: 2037402594}
-  fishSpawner_10: {fileID: 879224427}
-  fishSpawner_50: {fileID: 382107689}
-  _level: 1
+  fishSpawner:
+  - {fileID: 0}
+  - {fileID: 2037402594}
+  - {fileID: 879224427}
+  - {fileID: 382107689}
   scoreThreshold: 000000000a0000003200000064000000
 --- !u!4 &1150426556
 Transform:
@@ -2006,7 +2007,6 @@ GameObject:
   - component: {fileID: 1273661119}
   - component: {fileID: 1273661118}
   - component: {fileID: 1273661117}
-  - component: {fileID: 1273661121}
   - component: {fileID: 1273661116}
   - component: {fileID: 1273661115}
   m_Layer: 0
@@ -2157,18 +2157,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1273661121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1273661114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaa6485d7b6e38540b25c49eada150e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1330154063
 GameObject:
   m_ObjectHideFlags: 0
