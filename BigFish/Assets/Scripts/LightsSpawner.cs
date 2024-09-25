@@ -19,7 +19,8 @@ public class LightsSpawner : MonoBehaviour
 
     void Update()
     {
-        if (_timer > MaxTime)
+        float spawnTime = Random.Range(1f, MaxTime);
+        if (_timer > spawnTime)
         {
             SpawnTube();
             _timer = 0;
@@ -34,10 +35,5 @@ public class LightsSpawner : MonoBehaviour
 
         GameObject _newFish = Instantiate(_fish, position, Quaternion.identity);
         _newFish.transform.SetParent(baseObject.transform, false);
-        /*
-        GameObject newTube = Instantiate(_tube);
-        newTube.transform.position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
-        */
-        Destroy(_newFish, 10);
     }
 }

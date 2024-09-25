@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 public class GroundMover : MonoBehaviour
 {
     public float _speed;
-    private float targetX = -5f;
+    private float targetX = -8f;
     void Start()
     {
 

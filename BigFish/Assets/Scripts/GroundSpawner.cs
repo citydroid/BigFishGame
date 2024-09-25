@@ -13,21 +13,32 @@ public class GroundSpawner : MonoBehaviour
     private int terra = 0;
     public GameObject terra_1;
     public GameObject terra_2;
+    [SerializeField] private bool isTerra1 = false;
     void Start()
     {
-        _fish = terra_2;
+        if (isTerra1)
+        {
+            _fish = terra_1;
+        }
+        else
+        {
+            _fish = terra_2;
+        }
+
         baseObject = GameObject.Find("Base");
         SpawnTube();
     }
 
     void Update()
     {
+       
         if (_timer > MaxTime)
-        {
+        { 
+            /*  Для случайного появления
             terra = Random.Range(1, 10);
             if (terra <= 5) { _fish = terra_2; }
             else if (terra > 5) { _fish = terra_1; }
-
+        */
             SpawnTube();
             _timer = 0;
         }
