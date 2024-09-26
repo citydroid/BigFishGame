@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1357674143686492335}
   - component: {fileID: 5750637684443700934}
-  - component: {fileID: -5607217371004450781}
+  - component: {fileID: 3865115296519044265}
   m_Layer: 0
   m_Name: Wave
   m_TagString: Untagged
@@ -168,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4033234697579587686}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.648, y: 0.35, z: -0.0136269815}
+  m_LocalPosition: {x: 0, y: 0.35, z: -0.0136269815}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -203,7 +203,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.04369791, y: 0.042654812}
   m_EdgeRadius: 0
---- !u!114 &-5607217371004450781
+--- !u!114 &3865115296519044265
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,7 +212,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4033234697579587686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe4fa40d1695fc04ca70f8a6090df353, type: 3}
+  m_Script: {fileID: 11500000, guid: 6308323a445ad5642bb344df3992bf85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 1
+  targetX: -5

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class FishSpawner : MonoBehaviour
 {
-    [SerializeField] private float maxTime = 2.0f;
+    [SerializeField] private float maxTime;
     [SerializeField] private GameObject fishPrefab;
     [SerializeField] private float height;
     [SerializeField] private int spawnCount = 0;
@@ -35,7 +35,7 @@ public class FishSpawner : MonoBehaviour
     {
         for (int i = 0; i < spawnCount; i++)
         {
-            Vector3 position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
+            Vector3 position = transform.position + new Vector3(0, Random.Range(0, height), 0);
 
             GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);
             newFish.transform.SetParent(_baseObject.transform, false);
@@ -59,5 +59,9 @@ public class FishSpawner : MonoBehaviour
     {
         maxTime = newMaxTime;
         spawnCount = newSpawnCount;
+    }
+    public void IncreaseSpawnHight(float newHight)
+    {
+        height = newHight;
     }
 }
