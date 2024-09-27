@@ -1,22 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices;
 
 public class GameManager : MonoBehaviour
 {
 
     [SerializeField] private FishSpawner[] fishSpawner;
     [SerializeField] private int[] scoreThreshold;
+    [SerializeField] private Transform backgroundTransform;
 
     private readonly bool[] isWhiteDo = new bool[30];
     private readonly bool[] hasIncreasedSpawn =  new bool[30];
 
     private bool _isSceneChanging = false;
     private int currentLevel = 1;
+    private float maxPlayerHeight = 0.08f;
+    private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
 
-    private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
+private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
         { "Fish_2", (2, 1) },
         { "Fish_10", (10, 5) },
@@ -31,13 +32,32 @@ public class GameManager : MonoBehaviour
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
         // Настройки для уровня 0
-        new LevelSettings(0, new[] { (1, 0.5f, 3) }),
+        new LevelSettings(0, new[] { (1, 1f, 1) }),
         // Настройки для уровня 1
-        new LevelSettings(10, new[] { (1, 1f, 1), (2, 1f, 1), (3, 1f, 3) }),
+        new LevelSettings(3, new[] { (1, 1f, 1)}),
+new LevelSettings(4, new[] { (1, 1f, 1)}),
+new LevelSettings(5, new[] { (1, 1f, 1)}),
+new LevelSettings(6, new[] { (1, 1f, 1)}),
+new LevelSettings(7, new[] { (1, 1f, 1)}),
+new LevelSettings(8, new[] { (1, 1f, 1)}),
+new LevelSettings(9, new[] { (1, 1f, 1)}),
+new LevelSettings(10, new[] { (1, 1f, 1)}),
+new LevelSettings(11, new[] { (1, 1f, 1)}),
+new LevelSettings(12, new[] { (1, 1f, 1)})
         // Настройки для уровня 2
-        new LevelSettings(50, new[] { (1, 3f, 1), (2, 1f, 3), (5, 1f, 3) }),
+        /*
+        new LevelSettings(10, new[] { (1, 3f, 1), (2, 1f, 2), (3, 1f,2) }),
         // Настройки для уровня 3
-        new LevelSettings(100, new[] { (2, 2f, 2), (3, 0.5f, 3) })
+        new LevelSettings(50, new[] { (2, 1f, 1), (3, 1f, 1), (4, 1f, 1) }),
+        // Настройки для уровня 4
+        new LevelSettings(150, new[] { (1, 0.5f, 3), (2, 1f, 1), (3, 3f, 1), (4, 1f, 1), (5, 1f, 1), (6, 3f, 3)}),
+        // Настройки для уровня 5
+        new LevelSettings(250, new[] { (1, 1f, 1), (2, 0f, 0), (3, 1f, 1), (4, 1f, 1), (5, 1f, 1), (6, 3f, 3) }),
+        // Настройки для уровня 6
+        new LevelSettings(375, new[] { (3, 1f, 3), (4, 1f, 1), (5, 1f, 1), (7, 3f, 3) }),
+        // Настройки для уровня 7
+        new LevelSettings(500, new[] { (2, 2f, 1), (3, 1f, 3), (4, 1f, 1) }) 
+        */
     };
     public void Start()
     {
@@ -45,6 +65,7 @@ public class GameManager : MonoBehaviour
         transform.parent = null;
         // Подписываемся на событие загрузки новой сцены
         SceneManager.sceneLoaded += OnSceneLoaded;
+        backgroundTransform.position = new Vector3(backgroundTransform.position.x, -3.2f, backgroundTransform.position.z);
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -58,8 +79,9 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             int currentScore = Score.instance.GetScore();
-
             // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
+            ProcessLevelProgress(currentScore);
+
             if (currentScore >= scoreThreshold[currentLevel])
             {
                 // Скрываем объекты "Red" для всех рыб текущего уровня
@@ -68,38 +90,10 @@ public class GameManager : MonoBehaviour
                 currentLevel++;
                 Progress.Instance.PlayerInfo.Level = currentLevel;
                 // Включаем флаг "isWhite" в спаунере рыб текущего уровня
-                fishSpawner[currentLevel].IsWhiteSwitch();
-            }
-
-            //ProcessLevelProgress(currentScore);
-
-            if (currentScore >= scoreThreshold[0] && !hasIncreasedSpawn[0])
-            {
-                Level_0(); Debug.Log("0 " + currentScore + "  : " + scoreThreshold[0]);
-            }
-            if (currentScore >= scoreThreshold[1] && !hasIncreasedSpawn[1])
-            {
-                Level_1(); Debug.Log("1 " + currentScore + "  : " + scoreThreshold[1]);
-            }
-            if (currentScore >= scoreThreshold[2] && !hasIncreasedSpawn[2])
-            {
-                Level_2(); Debug.Log("2 " + currentScore + "  : " + scoreThreshold[2]);
-            }
-            if (currentScore >= scoreThreshold[3] && !hasIncreasedSpawn[3])
-            {
-                Level_3(); Debug.Log("3 " + currentScore + "  : " + scoreThreshold[3]);
-            }
-            if (currentScore >= scoreThreshold[4] && !hasIncreasedSpawn[4])
-            {
-                Level_4(); Debug.Log("4 " + currentScore + "  : " + scoreThreshold[4]);
-            }
-            if (currentScore >= scoreThreshold[5] && !hasIncreasedSpawn[5])
-            {
-                Level_5(); Debug.Log("5 " + currentScore + "  : " + scoreThreshold[5]);
-            }
-            if (currentScore >= scoreThreshold[6] && !hasIncreasedSpawn[6])
-            {
-                Level_6(); Debug.Log("6 " + currentScore + "  : " + scoreThreshold[6]);
+                if (currentLevel < fishSpawner.Length)
+                {
+                    fishSpawner[currentLevel].IsWhiteSwitch();
+                }
             }
         }
     }
@@ -126,16 +120,18 @@ public class GameManager : MonoBehaviour
         if (currentLevel >= levelSettings.Count) return;
 
         var settings = levelSettings[currentLevel];
-
+Debug.Log("0 " + currentScore + "  : " + settings.RequiredScore);
         if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
         {
             ApplyLevelSettings(settings);
+            UpdateBackgroundPosition();
             hasIncreasedSpawn[currentLevel] = true;
         }
     }
 
     private void ApplyLevelSettings(LevelSettings settings)
     {
+        Debug.Log("6 " + currentLevel + "  : " + scoreThreshold[6]);
         foreach (var (spawnerIndex, spawnRate, spawnAmount) in settings.SpawnActions)
         {
             fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount);
@@ -152,8 +148,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-
-
     public bool TryGetFishValue(string fishTag, out int fishValue, out int scoreAdd)
     {
         if (fishValues.TryGetValue(fishTag, out var values))
@@ -167,60 +161,26 @@ public class GameManager : MonoBehaviour
         scoreAdd = 0;
         return false;
     }
+    public float GetMaxPlayerHeight()
+    {
+        return maxPlayerHeight;
+    }
+    private void UpdateBackgroundPosition(int level)
+    {
+        if (level < backgroundYOffsets.Length)
+        {
+            Vector3 newPosition = backgroundTransform.position;
+            newPosition.y = backgroundYOffsets[level];
+            backgroundTransform.position = newPosition;
+        }
+    }
+    private void UpdateBackgroundPosition()
+    {
+            Vector3 newPosition = backgroundTransform.position;
+            newPosition.y += 0.3f;
+            backgroundTransform.position = newPosition;
 
-    private void Level_0()
-    {
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[1].IncreaseSpawnRate(0.5f, 3);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[0] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
-    }
-    private void Level_1()
-    {
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[1].IncreaseSpawnRate(1f, 1);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[1] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
-        fishSpawner[2].IncreaseSpawnRate(1f, 1);
-        fishSpawner[2].IncreaseSpawnHight(1f);
-        fishSpawner[3].IncreaseSpawnRate(1f, 3);
-        fishSpawner[4].IncreaseSpawnRate(1f, 1);
-    }
-    private void Level_2()
-    {
-        fishSpawner[1].IncreaseSpawnRate(3f, 1);
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[2].IncreaseSpawnRate(1f, 3);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[2] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
-        fishSpawner[3].IncreaseSpawnRate(1f, 1);
-        fishSpawner[5].IncreaseSpawnRate(1f, 3);
-        fishSpawner[7].IncreaseSpawnRate(5f, 1);
-    }
-    private void Level_3()
-    {
-        fishSpawner[2].IncreaseSpawnRate(2f, 2);
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[3].IncreaseSpawnRate(0.5f, 3);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[3] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
-    }
-    private void Level_4()
-    {
-        fishSpawner[3].IncreaseSpawnRate(2f, 2);
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[4].IncreaseSpawnRate(0.5f, 3);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[4] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
-    }
-    private void Level_5()
-    {
-        fishSpawner[4].IncreaseSpawnRate(2f, 2);
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[5].IncreaseSpawnRate(0.5f, 3);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[5] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
-    }
-    private void Level_6()
-    {
-        fishSpawner[5].IncreaseSpawnRate(2f, 2);
-        // Увеличиваем количество спавнящихся объектов
-        fishSpawner[6].IncreaseSpawnRate(0.5f, 3);  // Уменьшаем время спавна и увеличиваем количество объектов
-        hasIncreasedSpawn[6] = true;  // Ставим флаг, чтобы увеличить спавн только один раз
+            maxPlayerHeight += 0.3f;
     }
 }
 
