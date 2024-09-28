@@ -14,9 +14,9 @@ public class GameManager : MonoBehaviour
 
     private bool _isSceneChanging = false;
     private int currentLevel = 1;
-    private float maxPlayerHeight = 4f; //0.08f
-    private readonly float startBackgroundPosition = 1f; //-3.2f
-                                                //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
+    private float maxPlayerHeight = -0.5f; //4f
+    private readonly float startBackgroundPosition = -2.5f; //1f
+    //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
@@ -35,7 +35,8 @@ public class GameManager : MonoBehaviour
         // Настройки для уровня 0
         new LevelSettings(0, new[] { (1, 1f, 1) }),
         // Настройки для уровня 1
-        new LevelSettings(3, new[] { (1, 1f, 1)}),
+        new LevelSettings(3, new[] { (1, 3f, 1)}),
+        /*
 new LevelSettings(4, new[] { (1, 1f, 1)}),
 new LevelSettings(5, new[] { (1, 1f, 1)}),
 new LevelSettings(6, new[] { (1, 1f, 1)}),
@@ -44,10 +45,10 @@ new LevelSettings(8, new[] { (1, 1f, 1)}),
 new LevelSettings(9, new[] { (1, 1f, 1)}),
 new LevelSettings(10, new[] { (1, 1f, 1)}),
 new LevelSettings(11, new[] { (1, 1f, 1)}),
-new LevelSettings(12, new[] { (1, 1f, 1)})
+new LevelSettings(12, new[] { (1, 1f, 1)})*/
         // Настройки для уровня 2
-        /*
-        new LevelSettings(10, new[] { (1, 3f, 1), (2, 1f, 2), (3, 1f,2) }),
+
+        new LevelSettings(10, new[] { (1, 1f, 1), (2, 1f, 2), (3, 1f,2) }),
         // Настройки для уровня 3
         new LevelSettings(50, new[] { (2, 1f, 1), (3, 1f, 1), (4, 1f, 1) }),
         // Настройки для уровня 4
@@ -58,7 +59,7 @@ new LevelSettings(12, new[] { (1, 1f, 1)})
         new LevelSettings(375, new[] { (3, 1f, 3), (4, 1f, 1), (5, 1f, 1), (7, 3f, 3) }),
         // Настройки для уровня 7
         new LevelSettings(500, new[] { (2, 2f, 1), (3, 1f, 3), (4, 1f, 1) }) 
-        */
+
     };
     public void Start()
     {
@@ -96,6 +97,7 @@ new LevelSettings(12, new[] { (1, 1f, 1)})
                     fishSpawner[currentLevel].IsWhiteSwitch();
                 }
             }
+            UpdateBackgroundPosition();
         }
     }
     private void HideRedObjectsIfScoreMet(int fishValue)
@@ -178,10 +180,10 @@ new LevelSettings(12, new[] { (1, 1f, 1)})
     private void UpdateBackgroundPosition()
     {
             Vector3 newPosition = backgroundTransform.position;
-            newPosition.y += 0.3f;
+            newPosition.y += 0.0001f;
             backgroundTransform.position = newPosition;
 
-            maxPlayerHeight += 0.3f;
+            maxPlayerHeight += 0.0001f;
     }
 }
 

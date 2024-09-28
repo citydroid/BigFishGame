@@ -11,8 +11,8 @@ public class GroundSpawner : MonoBehaviour
     public GameObject terra_1;
     public GameObject terra_2;
     public float MaxTime = 1.0f;
-    public float height;
 
+    private float height = 0;
     private float _timer = 0;
     private GameObject _terra;
     //private int terra = 0;
