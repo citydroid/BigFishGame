@@ -14,10 +14,11 @@ public class GameManager : MonoBehaviour
 
     private bool _isSceneChanging = false;
     private int currentLevel = 1;
-    private float maxPlayerHeight = 0.08f;
-    private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
+    private float maxPlayerHeight = 4f; //0.08f
+    private readonly float startBackgroundPosition = 1f; //-3.2f
+                                                //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
 
-private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
+    private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
         { "Fish_2", (2, 1) },
         { "Fish_10", (10, 5) },
@@ -65,7 +66,7 @@ new LevelSettings(12, new[] { (1, 1f, 1)})
         transform.parent = null;
         // Подписываемся на событие загрузки новой сцены
         SceneManager.sceneLoaded += OnSceneLoaded;
-        backgroundTransform.position = new Vector3(backgroundTransform.position.x, -3.2f, backgroundTransform.position.z);
+        backgroundTransform.position = new Vector3(backgroundTransform.position.x, startBackgroundPosition, backgroundTransform.position.z);
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -120,7 +121,7 @@ new LevelSettings(12, new[] { (1, 1f, 1)})
         if (currentLevel >= levelSettings.Count) return;
 
         var settings = levelSettings[currentLevel];
-Debug.Log("0 " + currentScore + "  : " + settings.RequiredScore);
+//Debug.Log("0 " + currentScore + "  : " + settings.RequiredScore);
         if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
         {
             ApplyLevelSettings(settings);
@@ -167,12 +168,12 @@ Debug.Log("0 " + currentScore + "  : " + settings.RequiredScore);
     }
     private void UpdateBackgroundPosition(int level)
     {
-        if (level < backgroundYOffsets.Length)
+ /*       if (level < backgroundYOffsets.Length)
         {
             Vector3 newPosition = backgroundTransform.position;
             newPosition.y = backgroundYOffsets[level];
             backgroundTransform.position = newPosition;
-        }
+        }*/
     }
     private void UpdateBackgroundPosition()
     {

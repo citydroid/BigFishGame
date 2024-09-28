@@ -313,7 +313,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minSpeed: 1
   maxSpeed: 2
-  targetX: -5
 --- !u!1 &4138098844974715616
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +483,7 @@ GameObject:
   - component: {fileID: 4558982586368053268}
   - component: {fileID: 3042325037039851031}
   - component: {fileID: 6793297606394335191}
+  - component: {fileID: 3217218719292642194}
   m_Layer: 0
   m_Name: Fish
   m_TagString: Untagged
@@ -579,6 +579,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3217218719292642194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4707056196496522974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4816740906793170076
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,6 +601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3709386981725514535}
   - component: {fileID: 209920808026969609}
+  - component: {fileID: 1816881249361958688}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -664,6 +677,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1816881249361958688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816740906793170076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4938078880910621861
 GameObject:
   m_ObjectHideFlags: 0

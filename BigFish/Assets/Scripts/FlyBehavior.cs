@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FlyBehavior : MonoBehaviour
 {
@@ -25,6 +19,11 @@ public class FlyBehavior : MonoBehaviour
     private bool playGame = true;
     private float cameraMinY; // Минимальное значение по оси Y для камеры
     private float maxPlayerHeight; // Максимальная высота игрока
+
+    private Vector3 velocity = Vector3.zero; // Переменная для плавного движения камеры
+    private float smoothTime = 1f; // Время, за которое камера достигает целевой позиции
+    private float predictionFactor = 10f; // Коэффициент предсказания позиции
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -59,20 +58,29 @@ public class FlyBehavior : MonoBehaviour
         // Переводим позицию игрока из мировых координат в координаты экрана (0-1)
         Vector3 playerScreenPos = Camera.main.WorldToViewportPoint(_tr.position);
 
+        // Рассчитываем целевую позицию камеры
+        Vector3 targetPosition = cameraTransform.position;
+
         // Если игрок достигает верхней четверти экрана
         if (playerScreenPos.y >= upperScreenThreshold)
         {
-            cameraTransform.position += Vector3.up * cameraMoveSpeed * Time.deltaTime;
+            // Предсказываем дальнейшее движение игрока, смещая камеру выше его положения
+            float predictedYPosition = _tr.position.y + (cameraMoveSpeed * predictionFactor);
+            targetPosition = new Vector3(cameraTransform.position.x, predictedYPosition, cameraTransform.position.z);
         }
         // Если игрок опускается ниже нижней четверти экрана
         else if (playerScreenPos.y <= lowerScreenThreshold)
         {
-            // Сдвигаем камеру вниз, но не ниже минимального значения cameraMinY
             if (cameraTransform.position.y > cameraMinY)
             {
-                cameraTransform.position += Vector3.down * cameraMoveSpeed * Time.deltaTime;
+                // Предсказываем дальнейшее движение игрока вниз, но не опускаем камеру ниже cameraMinY
+                float predictedYPosition = _tr.position.y - (cameraMoveSpeed * predictionFactor);
+                targetPosition = new Vector3(cameraTransform.position.x, Mathf.Max(predictedYPosition, cameraMinY), cameraTransform.position.z);
             }
         }
+
+        // Плавно перемещаем камеру в предсказанную позицию
+        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, targetPosition, ref velocity, smoothTime);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
