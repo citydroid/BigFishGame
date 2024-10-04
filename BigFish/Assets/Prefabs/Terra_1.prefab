@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 1450459299684449065}
   - component: {fileID: 6381183015204349946}
   - component: {fileID: 2933858793054866443}
-  - component: {fileID: 122162534910003414}
   m_Layer: 0
-  m_Name: Terra1 (1)
+  m_Name: TerraSprite1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,32 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &122162534910003414
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387704816042127559}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.05994463, y: -0.23977661}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 13.34, y: 1}
-    newSize: {x: 0.26, y: 1.61}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 19.358658, y: 0.1804468}
-  m_EdgeRadius: 0
 --- !u!1 &1245260228058774852
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +164,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1357674143686492335}
-  - component: {fileID: 5750637684443700934}
   - component: {fileID: 5831381059349885051}
   m_Layer: 0
   m_Name: Terra_1
@@ -218,32 +190,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &5750637684443700934
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4033234697579587686}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.08749973, y: 0.0015884936}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.04369791, y: 0.042654812}
-  m_EdgeRadius: 0
 --- !u!114 &5831381059349885051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,6 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 0.3
   targetX: -7
+  spriteRenderer: {fileID: 6381183015204349946}
 --- !u!1 &7884939221397683736
 GameObject:
   m_ObjectHideFlags: 0

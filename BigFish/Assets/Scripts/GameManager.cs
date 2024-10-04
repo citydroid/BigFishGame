@@ -1,3 +1,4 @@
+using Movers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private FishSpawner[] fishSpawner;
     [SerializeField] private int[] scoreThreshold;
     [SerializeField] private Transform backgroundTransform;
+    [SerializeField] private TerraWaveSpawner groundSpawner1;
+    [SerializeField] private TerraWaveSpawner groundSpawner2;
+    private TerraWaveSpawner colorGround1;
+    private TerraWaveSpawner colorGround2;
 
     private readonly bool[] isWhiteDo = new bool[30];
     private readonly bool[] hasIncreasedSpawn =  new bool[30];
@@ -16,6 +21,7 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 1;
     private float maxPlayerHeight = -0.5f; //4f
     private readonly float startBackgroundPosition = -2.5f; //1f
+    private float depthCoeff = 0.0002f; 
     //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
@@ -68,6 +74,8 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
         // Подписываемся на событие загрузки новой сцены
         SceneManager.sceneLoaded += OnSceneLoaded;
         backgroundTransform.position = new Vector3(backgroundTransform.position.x, startBackgroundPosition, backgroundTransform.position.z);
+        colorGround1 = groundSpawner1.GetComponent<TerraWaveSpawner>();
+        colorGround2 = groundSpawner2.GetComponent<TerraWaveSpawner>();
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -127,7 +135,7 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
         if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
         {
             ApplyLevelSettings(settings);
-            UpdateBackgroundPosition();
+            //UpdateBackgroundPosition();
             hasIncreasedSpawn[currentLevel] = true;
         }
     }
@@ -168,22 +176,15 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
     {
         return maxPlayerHeight;
     }
-    private void UpdateBackgroundPosition(int level)
-    {
- /*       if (level < backgroundYOffsets.Length)
-        {
-            Vector3 newPosition = backgroundTransform.position;
-            newPosition.y = backgroundYOffsets[level];
-            backgroundTransform.position = newPosition;
-        }*/
-    }
     private void UpdateBackgroundPosition()
     {
             Vector3 newPosition = backgroundTransform.position;
-            newPosition.y += 0.0001f;
+            newPosition.y += depthCoeff;
             backgroundTransform.position = newPosition;
+            maxPlayerHeight += depthCoeff;
 
-            maxPlayerHeight += 0.0001f;
+        colorGround1.ChangeGrayLevel(depthCoeff/5);
+        colorGround2.ChangeGrayLevel(depthCoeff / 5);
     }
 }
 
