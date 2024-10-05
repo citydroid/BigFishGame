@@ -23,8 +23,6 @@ public class GameManager : MonoBehaviour
     private float depthCoeff = 0.0002f;
     //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
 
-    private readonly int[] scoreThreshold = new int[]
-    { 0, 10, 50, 150, 250, 375, 500, 1000 };
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
@@ -36,6 +34,7 @@ public class GameManager : MonoBehaviour
         { "Fish_375", (375, 25) },
         { "Fish_500", (500, 30) }
     };
+    private List<KeyValuePair<string, (int fishValue, int scoreAdd)>> fishValuesList;
 
     // Список настроек уровней
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
@@ -67,6 +66,9 @@ public class GameManager : MonoBehaviour
         backgroundTransform.position = new Vector3(backgroundTransform.position.x, startBackgroundPosition, backgroundTransform.position.z);
         colorGround1 = groundSpawner1.GetComponent<TerraWaveSpawner>();
         colorGround2 = groundSpawner2.GetComponent<TerraWaveSpawner>();
+        // Преобразуем словарь в список пар
+        fishValuesList = new List<KeyValuePair<string, (int fishValue, int scoreAdd)>>(fishValues);
+
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -83,19 +85,20 @@ public class GameManager : MonoBehaviour
             // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
             ProcessLevelProgress(currentScore);
 
-            if (currentScore >= scoreThreshold[currentLevel])
-            {
-                // Скрываем объекты "Red" для всех рыб текущего уровня
-                HideRedObjectsIfScoreMet(scoreThreshold[currentLevel]);
-                // Переходим на следующий уровень
-                currentLevel++;
-                Progress.Instance.PlayerInfo.Level = currentLevel;
-                // Включаем флаг "isWhite" в спаунере рыб текущего уровня
-                if (currentLevel < fishSpawner.Length)
+                if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
                 {
-                    fishSpawner[currentLevel].IsWhiteSwitch();
+                    int fishValue = fishValuesList[currentLevel].Value.fishValue;
+                    // Скрываем объекты "Red" для всех рыб текущего уровня
+                    HideRedObjectsIfScoreMet(fishValue);
+                    // Переходим на следующий уровень
+                    currentLevel++;
+                    Progress.Instance.PlayerInfo.Level = currentLevel;
+                    // Включаем флаг "isWhite" в спаунере рыб текущего уровня
+                    if (currentLevel < fishSpawner.Length)
+                    {
+                        fishSpawner[currentLevel].IsWhiteSwitch();
+                    }
                 }
-            }
             UpdateBackgroundPosition();
         }
     }
@@ -132,7 +135,6 @@ public class GameManager : MonoBehaviour
 
     private void ApplyLevelSettings(LevelSettings settings)
     {
-        Debug.Log("6 " + currentLevel + "  : " + scoreThreshold[6]);
         foreach (var (spawnerIndex, spawnRate, spawnAmount, hightMin, hightMax) in settings.SpawnActions)
         {
             fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount, hightMin, hightMax);

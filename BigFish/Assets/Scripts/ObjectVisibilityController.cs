@@ -3,7 +3,6 @@ public class ObjectVisibilityController : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private Camera mainCamera;
- //   private Collider2D objectCollider;
     private const float visibilityPadding = 0.8f; // Зазор в 10%
     private Canvas objectCanvas;
     private void Start()
@@ -36,17 +35,7 @@ public class ObjectVisibilityController : MonoBehaviour
     private bool IsObjectVisible()
     {
         Bounds objectBounds;
-
-        // Используем коллайдер, если он есть, иначе используем размеры спрайта
-        /*
-        if (objectCollider != null)
-        {
-            objectBounds = objectCollider.bounds;
-        }
-        else
-        {*/
-            objectBounds = spriteRenderer.bounds;
-      //  }
+        objectBounds = spriteRenderer.bounds;
         
         // Получаем все четыре угла объекта с учетом зазора
         Vector3 minBounds = objectBounds.min - new Vector3(objectBounds.size.x * visibilityPadding, objectBounds.size.y * visibilityPadding, 0);
@@ -61,7 +50,7 @@ public class ObjectVisibilityController : MonoBehaviour
                          (screenPointMin.y < 1 && screenPointMax.y > 0);
 
         // Лог для отладки
-        Debug.Log("Object is visible: " + isVisible + " | Bounds min: " + screenPointMin + " | Bounds max: " + screenPointMax);
+       // Debug.Log("Object is visible: " + isVisible + " | Bounds min: " + screenPointMin + " | Bounds max: " + screenPointMax);
 
         return isVisible;
     }

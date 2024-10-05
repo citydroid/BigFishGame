@@ -21,7 +21,6 @@ namespace Movers
         {
             // Ограничиваем уровень серого от 0 (черный) до 1 (белый)
             grayLevel = Mathf.Clamp01(grayLevel);
-            Debug.Log("grayLevel  " + grayLevel);
             // Устанавливаем одинаковые значения R, G, B для создания серого оттенка
             Color grayColor = new Color(grayLevel, grayLevel, grayLevel);
             if (spriteRenderer != null)
