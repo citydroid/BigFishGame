@@ -12,9 +12,11 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float heightMax;
     [SerializeField] private int spawnCount = 0;
     [SerializeField] private bool isWhite = false;
+    [SerializeField] private GameManager gameManager;
 
     private float _timer = 0f;
     private GameObject _baseObject;
+    private float heightStoper = 1;
 
     void Start()
     {
@@ -34,8 +36,11 @@ public class FishSpawner : MonoBehaviour
 
     private void SpawnFish()
     {
+        heightStoper = gameManager.GetMaxPlayerHeight() + 0.9f;
         for (int i = 0; i < spawnCount; i++)
         {
+            if (heightStoper < heightMax) heightMax = heightStoper;
+
             Vector3 position = transform.position + new Vector3(0, Random.Range(heightMin, heightMax), 0);
 
             GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);

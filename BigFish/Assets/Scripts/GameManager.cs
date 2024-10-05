@@ -21,8 +21,6 @@ public class GameManager : MonoBehaviour
     private float maxPlayerHeight = -0.5f; //4f
     private readonly float startBackgroundPosition = -2.5f; //1f
     private float depthCoeff = 0.0002f;
-    //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
-
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
@@ -39,21 +37,15 @@ public class GameManager : MonoBehaviour
     // Список настроек уровней
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
-        // Настройки для уровня 0
-        new LevelSettings(0, new[] { (1, 1f, 1, 0f,1f) }),
-        // Настройки для уровня 1
-        new LevelSettings(3, new[] { (1, 3f, 10, 0f, 1f) }),
-        // Настройки для уровня 2
-        new LevelSettings(10, new[] { (1, 1f, 1, 0f, 1f), (2, 1f, 2, 0f, 1f), (3, 1f,2, 0f, 1f) }),
-        // Настройки для уровня 3
-        new LevelSettings(50, new[] { (2, 1f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f) }),
-        // Настройки для уровня 4
-        new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 1f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
-        // Настройки для уровня 5
+        // Настройки для уровня 0 (# рыбы, пауза между спаунами, количество рыбы за спаун, мин.высота, макс.высота)
+        new LevelSettings(0, new[] { (1, 2f, 1, 0f, 1f), (2, 5f, 1, 0f, 0.1f) }),
+        new LevelSettings(3, new[] { (1, 5f, 10, 0f, 1f) }),
+        new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 2f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
+        new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f) }),
+        new LevelSettings(100, new[] { (4, 5f, 1, 0f, 1f) }),
+        new LevelSettings(150, new[] { (1, 0.5f, 3, 1f, 2f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
         new LevelSettings(250, new[] { (1, 1f, 1, 0f, 1f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
-        // Настройки для уровня 6
-        new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 1f) }),
-        // Настройки для уровня 7
+        new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0.5f, 1f) }),
         new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f) }) 
 
     };
