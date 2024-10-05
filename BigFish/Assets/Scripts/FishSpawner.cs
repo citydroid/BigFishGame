@@ -8,7 +8,8 @@ public class FishSpawner : MonoBehaviour
 {
     [SerializeField] private float maxTime;
     [SerializeField] private GameObject fishPrefab;
-    [SerializeField] private float height;
+    [SerializeField] private float heightMin = 0;
+    [SerializeField] private float heightMax;
     [SerializeField] private int spawnCount = 0;
     [SerializeField] private bool isWhite = false;
 
@@ -35,7 +36,7 @@ public class FishSpawner : MonoBehaviour
     {
         for (int i = 0; i < spawnCount; i++)
         {
-            Vector3 position = transform.position + new Vector3(0, Random.Range(0, height), 0);
+            Vector3 position = transform.position + new Vector3(0, Random.Range(heightMin, heightMax), 0);
 
             GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);
             newFish.transform.SetParent(_baseObject.transform, false);
@@ -55,13 +56,11 @@ public class FishSpawner : MonoBehaviour
     {
         isWhite = true;
     }
-    public void IncreaseSpawnRate(float newMaxTime, int newSpawnCount)
+    public void IncreaseSpawnRate(float newMaxTime, int newSpawnCount, float newhightMin, float newhightMax)
     {
         maxTime = newMaxTime;
         spawnCount = newSpawnCount;
-    }
-    public void IncreaseSpawnHight(float newHight)
-    {
-        height = newHight;
+        heightMin = newhightMin;
+        heightMax = newhightMax;
     }
 }

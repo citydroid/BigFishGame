@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 {
 
     [SerializeField] private FishSpawner[] fishSpawner;
-    [SerializeField] private int[] scoreThreshold;
     [SerializeField] private Transform backgroundTransform;
     [SerializeField] private TerraWaveSpawner groundSpawner1;
     [SerializeField] private TerraWaveSpawner groundSpawner2;
@@ -21,8 +20,11 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 1;
     private float maxPlayerHeight = -0.5f; //4f
     private readonly float startBackgroundPosition = -2.5f; //1f
-    private float depthCoeff = 0.0002f; 
+    private float depthCoeff = 0.0002f;
     //private readonly float[] backgroundYOffsets = new float[] { -2f, -4f, -3.9f, -3.8f, 3.7f, 1f, 2f };
+
+    private readonly int[] scoreThreshold = new int[]
+    { 0, 10, 50, 150, 250, 375, 500, 1000 };
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
@@ -39,32 +41,21 @@ public class GameManager : MonoBehaviour
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
         // Настройки для уровня 0
-        new LevelSettings(0, new[] { (1, 1f, 1) }),
+        new LevelSettings(0, new[] { (1, 1f, 1, 0f,1f) }),
         // Настройки для уровня 1
-        new LevelSettings(3, new[] { (1, 3f, 1)}),
-        /*
-new LevelSettings(4, new[] { (1, 1f, 1)}),
-new LevelSettings(5, new[] { (1, 1f, 1)}),
-new LevelSettings(6, new[] { (1, 1f, 1)}),
-new LevelSettings(7, new[] { (1, 1f, 1)}),
-new LevelSettings(8, new[] { (1, 1f, 1)}),
-new LevelSettings(9, new[] { (1, 1f, 1)}),
-new LevelSettings(10, new[] { (1, 1f, 1)}),
-new LevelSettings(11, new[] { (1, 1f, 1)}),
-new LevelSettings(12, new[] { (1, 1f, 1)})*/
+        new LevelSettings(3, new[] { (1, 3f, 10, 0f, 1f) }),
         // Настройки для уровня 2
-
-        new LevelSettings(10, new[] { (1, 1f, 1), (2, 1f, 2), (3, 1f,2) }),
+        new LevelSettings(10, new[] { (1, 1f, 1, 0f, 1f), (2, 1f, 2, 0f, 1f), (3, 1f,2, 0f, 1f) }),
         // Настройки для уровня 3
-        new LevelSettings(50, new[] { (2, 1f, 1), (3, 1f, 1), (4, 1f, 1) }),
+        new LevelSettings(50, new[] { (2, 1f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f) }),
         // Настройки для уровня 4
-        new LevelSettings(150, new[] { (1, 0.5f, 3), (2, 1f, 1), (3, 3f, 1), (4, 1f, 1), (5, 1f, 1), (6, 3f, 3)}),
+        new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 1f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
         // Настройки для уровня 5
-        new LevelSettings(250, new[] { (1, 1f, 1), (2, 0f, 0), (3, 1f, 1), (4, 1f, 1), (5, 1f, 1), (6, 3f, 3) }),
+        new LevelSettings(250, new[] { (1, 1f, 1, 0f, 1f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
         // Настройки для уровня 6
-        new LevelSettings(375, new[] { (3, 1f, 3), (4, 1f, 1), (5, 1f, 1), (7, 3f, 3) }),
+        new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 1f) }),
         // Настройки для уровня 7
-        new LevelSettings(500, new[] { (2, 2f, 1), (3, 1f, 3), (4, 1f, 1) }) 
+        new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f) }) 
 
     };
     public void Start()
@@ -131,7 +122,6 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
         if (currentLevel >= levelSettings.Count) return;
 
         var settings = levelSettings[currentLevel];
-//Debug.Log("0 " + currentScore + "  : " + settings.RequiredScore);
         if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
         {
             ApplyLevelSettings(settings);
@@ -143,9 +133,9 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
     private void ApplyLevelSettings(LevelSettings settings)
     {
         Debug.Log("6 " + currentLevel + "  : " + scoreThreshold[6]);
-        foreach (var (spawnerIndex, spawnRate, spawnAmount) in settings.SpawnActions)
+        foreach (var (spawnerIndex, spawnRate, spawnAmount, hightMin, hightMax) in settings.SpawnActions)
         {
-            fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount);
+            fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount, hightMin, hightMax);
         }
     }
     public void GameOver()
@@ -183,7 +173,7 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
             backgroundTransform.position = newPosition;
             maxPlayerHeight += depthCoeff;
 
-        colorGround1.ChangeGrayLevel(depthCoeff/5);
+        colorGround1.ChangeGrayLevel(depthCoeff / 5);
         colorGround2.ChangeGrayLevel(depthCoeff / 5);
     }
 }
@@ -194,12 +184,12 @@ new LevelSettings(12, new[] { (1, 1f, 1)})*/
 public class LevelSettings
 {
     public int RequiredScore; // Порог очков для перехода на уровень
-    public List<(int spawnerIndex, float spawnRate, int spawnAmount)> SpawnActions; // Действия для увеличения спавна
+    public List<(int spawnerIndex, float spawnRate, int spawnAmount, float hightMin, float hightMax)> SpawnActions; // Действия для увеличения спавна
 
-    public LevelSettings(int requiredScore, params (int spawnerIndex, float spawnRate, int spawnAmount)[] actions)
+    public LevelSettings(int requiredScore, params (int spawnerIndex, float spawnRate, int spawnAmount, float hightMin, float hightMax)[] actions)
     {
         RequiredScore = requiredScore;
-        SpawnActions = new List<(int spawnerIndex, float spawnRate, int spawnAmount)>(actions);
+        SpawnActions = new List<(int spawnerIndex, float spawnRate, int spawnAmount, float hightMin, float hightMax)>(actions);
     }
 }
 //Time.timeScale = 0;
