@@ -626,8 +626,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724faf26507a2e4aa06d972ed85a05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerObject: {fileID: 0}
   fishSpawner: []
-  scoreThreshold: 000000000a0000003200000064000000
+  backgroundTransform: {fileID: 0}
+  groundSpawner1: {fileID: 0}
+  groundSpawner2: {fileID: 0}
 --- !u!4 &632014860
 Transform:
   m_ObjectHideFlags: 0
@@ -1155,12 +1158,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 684a3f456830f2d4787fd3a34b7221a4, type: 3}
+  m_Sprite: {fileID: 1406262021, guid: 684a3f456830f2d4787fd3a34b7221a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 30.082094, y: 17.92}
+  m_Size: {x: 7.98, y: 3.59}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

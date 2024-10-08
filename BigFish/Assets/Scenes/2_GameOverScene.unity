@@ -244,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410689521}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.49, y: -4.82, z: 0.1295}
+  m_LocalPosition: {x: 5.3, y: -4.82, z: 0.1295}
   m_LocalScale: {x: 0.63785315, y: 0.63785315, z: 0.63785315}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -450,7 +450,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591753288}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.49, y: 3.09, z: 0.12948424}
+  m_LocalPosition: {x: 3.2, y: 3.09, z: 0.12948424}
   m_LocalScale: {x: 0.585838, y: 0.585838, z: 0.585838}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -539,8 +539,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724faf26507a2e4aa06d972ed85a05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerObject: {fileID: 0}
   fishSpawner: []
-  scoreThreshold: 000000000a0000003200000064000000
+  backgroundTransform: {fileID: 0}
+  groundSpawner1: {fileID: 0}
+  groundSpawner2: {fileID: 0}
 --- !u!4 &632014860
 Transform:
   m_ObjectHideFlags: 0
@@ -714,8 +717,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415455446}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.12, y: -1.46, z: 0.1295}
-  m_LocalScale: {x: 0.73794967, y: 0.73794967, z: 0.73794967}
+  m_LocalPosition: {x: 3.19, y: -0.7, z: 0.1295}
+  m_LocalScale: {x: 2.6571784, y: 2.6571784, z: 2.6571784}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1787538155}
@@ -762,12 +765,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: c13e1a61c1be88c48bcfdd16ca231ae6, type: 3}
+  m_Sprite: {fileID: 1527333839, guid: 684a3f456830f2d4787fd3a34b7221a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 30.082094, y: 17.92}
+  m_Size: {x: 1.86, y: 3.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1279,7 +1282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895248557}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.19, y: -4.81, z: 0.1295}
+  m_LocalPosition: {x: 1.7, y: -4.81, z: 0.1295}
   m_LocalScale: {x: 0.63785315, y: 0.63785315, z: 0.63785315}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1349,8 +1352,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2002282566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.823, y: -0.968, z: 0.12948424}
-  m_LocalScale: {x: 24.077927, y: 11.874561, z: 0.63785315}
+  m_LocalPosition: {x: 3.3535, y: -0.9158, z: 0.12948424}
+  m_LocalScale: {x: 6.4471855, y: 11.770614, z: 0.63785315}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1787538155}

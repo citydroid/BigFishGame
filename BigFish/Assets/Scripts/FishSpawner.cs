@@ -1,3 +1,4 @@
+using Movers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -14,9 +15,14 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private bool isWhite = false;
     [SerializeField] private GameManager gameManager;
 
+
     private float _timer = 0f;
     private GameObject _baseObject;
     private float heightStoper = 1;
+
+    private FishMover fishMover;
+    private float maxHeight = -0.5f;
+    private float depthCoeff = 0.0002f;
 
     void Start()
     {
@@ -46,6 +52,9 @@ public class FishSpawner : MonoBehaviour
             GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);
             newFish.transform.SetParent(_baseObject.transform, false);
 
+            //fishMover.SetDepth(maxHeight,depthCoeff);
+            newFish.GetComponent<FishMover>().SetDepth(maxHeight, depthCoeff);
+
             if (isWhite)
             {
                 Transform textTransform = newFish.transform.Find("Red");
@@ -56,6 +65,12 @@ public class FishSpawner : MonoBehaviour
                 }
             }
         }
+    }
+    public void SetMaxHeght(float newMaxHeight, float newDepthCoeff)
+    {
+        Debug.Log("maxHeight: " + maxHeight);
+        maxHeight = newMaxHeight;
+        depthCoeff = newDepthCoeff;
     }
     public void IsWhiteSwitch()
     {

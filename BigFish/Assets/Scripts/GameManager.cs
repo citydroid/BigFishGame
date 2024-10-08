@@ -5,13 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
+    [SerializeField] private GameObject playerObject;
     [SerializeField] private FishSpawner[] fishSpawner;
     [SerializeField] private Transform backgroundTransform;
     [SerializeField] private TerraWaveSpawner groundSpawner1;
     [SerializeField] private TerraWaveSpawner groundSpawner2;
     private TerraWaveSpawner colorGround1;
     private TerraWaveSpawner colorGround2;
+
 
     private readonly bool[] isWhiteDo = new bool[30];
     private readonly bool[] hasIncreasedSpawn =  new bool[30];
@@ -30,7 +31,9 @@ public class GameManager : MonoBehaviour
         { "Fish_150", (150, 15) },
         { "Fish_250", (250, 22) },
         { "Fish_375", (375, 25) },
-        { "Fish_500", (500, 30) }
+        { "Fish_500", (500, 30) },
+        { "Fish_1000", (1000, 35) },
+        { "Fish_2250", (2250, 40) }
     };
     private List<KeyValuePair<string, (int fishValue, int scoreAdd)>> fishValuesList;
 
@@ -41,12 +44,12 @@ public class GameManager : MonoBehaviour
         new LevelSettings(0, new[] { (1, 2f, 1, 0f, 1f), (2, 5f, 1, 0f, 0.1f) }),
         new LevelSettings(3, new[] { (1, 5f, 10, 0f, 1f) }),
         new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 2f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
-        new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f) }),
-        new LevelSettings(100, new[] { (4, 5f, 1, 0f, 1f) }),
-        new LevelSettings(150, new[] { (1, 0.5f, 3, 1f, 2f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
-        new LevelSettings(250, new[] { (1, 1f, 1, 0f, 1f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 3f, 3, 0f, 1f) }),
-        new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0.5f, 1f) }),
-        new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f) }) 
+        new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 2f, 1, 0f, 1f) }),
+        new LevelSettings(100, new[] { (1, 3f, 2, 0f, 1f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 0.5f, 3, 0f, 3f) }),
+        new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 3f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
+        new LevelSettings(250, new[] { (1, 1f, 1, 1f, 3f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
+        new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 0f) }),
+        new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (8, 3f, 3, 0.5f, 1f) }) 
 
     };
     public void Start()
@@ -60,7 +63,6 @@ public class GameManager : MonoBehaviour
         colorGround2 = groundSpawner2.GetComponent<TerraWaveSpawner>();
         // Преобразуем словарь в список пар
         fishValuesList = new List<KeyValuePair<string, (int fishValue, int scoreAdd)>>(fishValues);
-
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -82,6 +84,7 @@ public class GameManager : MonoBehaviour
                     int fishValue = fishValuesList[currentLevel].Value.fishValue;
                     // Скрываем объекты "Red" для всех рыб текущего уровня
                     HideRedObjectsIfScoreMet(fishValue);
+                    FishVerticalControl(fishValue); // Метод нужет только для создания события для после изменения уровня
                     // Переходим на следующий уровень
                     currentLevel++;
                     Progress.Instance.PlayerInfo.Level = currentLevel;
@@ -112,6 +115,17 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    private void FishVerticalControl(int fishValue)
+    {
+        // Логика для скрытия объектов "Red"
+        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishValue}");
+        Vector3 playerPosition = playerObject.transform.position;
+        foreach (GameObject fish in allFishObjects)
+        {
+           // fish.GetComponent<FishMover>().SetVerticalSpeed(playerPosition.y + 1f);
+            fish.GetComponent<FishMover>().SetMaxVertical(maxPlayerHeight);
+        }
+    }
     private void ProcessLevelProgress(int currentScore)
     {
         if (currentLevel >= levelSettings.Count) return;
@@ -121,7 +135,11 @@ public class GameManager : MonoBehaviour
         {
             ApplyLevelSettings(settings);
             //UpdateBackgroundPosition();
-            hasIncreasedSpawn[currentLevel] = true;
+            hasIncreasedSpawn[currentLevel] = true; 
+            foreach (FishSpawner fish in fishSpawner)
+            {
+                fish.GetComponent<FishSpawner>().SetMaxHeght(maxPlayerHeight, depthCoeff);
+            }
         }
     }
 
