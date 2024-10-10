@@ -68,7 +68,6 @@ public class FishSpawner : MonoBehaviour
     }
     public void SetMaxHeght(float newMaxHeight, float newDepthCoeff)
     {
-        Debug.Log("maxHeight: " + maxHeight);
         maxHeight = newMaxHeight;
         depthCoeff = newDepthCoeff;
     }

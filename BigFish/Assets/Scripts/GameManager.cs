@@ -1,4 +1,5 @@
 using Movers;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,12 +8,19 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject playerObject;
     [SerializeField] private FishSpawner[] fishSpawner;
+
     [SerializeField] private Transform backgroundTransform;
     [SerializeField] private TerraWaveSpawner groundSpawner1;
     [SerializeField] private TerraWaveSpawner groundSpawner2;
     private TerraWaveSpawner colorGround1;
     private TerraWaveSpawner colorGround2;
 
+    [SerializeField] private GameObject gameOverPrefab;
+    private GameObject gameOverInstance;
+    private CanvasGroup canvasGroup;
+    private float fadeDuration = 1f;
+    private bool gameOver = false;
+    public AudioSource gameMusic;
 
     private readonly bool[] isWhiteDo = new bool[30];
     private readonly bool[] hasIncreasedSpawn =  new bool[30];
@@ -45,7 +53,7 @@ public class GameManager : MonoBehaviour
         new LevelSettings(3, new[] { (1, 5f, 10, 0f, 1f) }),
         new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 2f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
         new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 2f, 1, 0f, 1f) }),
-        new LevelSettings(100, new[] { (1, 3f, 2, 0f, 1f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 0.5f, 3, 0f, 3f) }),
+        new LevelSettings(100, new[] { (1, 3f, 2, 0f, 1f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 1f, 2, 0f, 3f) }),
         new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 3f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
         new LevelSettings(250, new[] { (1, 1f, 1, 1f, 3f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
         new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 0f) }),
@@ -53,16 +61,19 @@ public class GameManager : MonoBehaviour
 
     };
     public void Start()
-    {
+    {   // Преобразуем словарь в список пар
+        fishValuesList = new List<KeyValuePair<string, (int fishValue, int scoreAdd)>>(fishValues);
+
         Time.timeScale = 1.0f;
         transform.parent = null;
         // Подписываемся на событие загрузки новой сцены
         SceneManager.sceneLoaded += OnSceneLoaded;
-        backgroundTransform.position = new Vector3(backgroundTransform.position.x, startBackgroundPosition, backgroundTransform.position.z);
-        colorGround1 = groundSpawner1.GetComponent<TerraWaveSpawner>();
-        colorGround2 = groundSpawner2.GetComponent<TerraWaveSpawner>();
-        // Преобразуем словарь в список пар
-        fishValuesList = new List<KeyValuePair<string, (int fishValue, int scoreAdd)>>(fishValues);
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            backgroundTransform.position = new Vector3(backgroundTransform.position.x, startBackgroundPosition, backgroundTransform.position.z);
+            colorGround1 = groundSpawner1.GetComponent<TerraWaveSpawner>();
+            colorGround2 = groundSpawner2.GetComponent<TerraWaveSpawner>();
+        }
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -75,26 +86,29 @@ public class GameManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            int currentScore = Score.instance.GetScore();
-            // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
-            ProcessLevelProgress(currentScore);
+            if (!gameOver)
+            {
+                int currentScore = Score.instance.GetScore();
+                // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
+                ProcessLevelProgress(currentScore);
 
-                if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
-                {
-                    int fishValue = fishValuesList[currentLevel].Value.fishValue;
-                    // Скрываем объекты "Red" для всех рыб текущего уровня
-                    HideRedObjectsIfScoreMet(fishValue);
-                    FishVerticalControl(fishValue); // Метод нужет только для создания события для после изменения уровня
-                    // Переходим на следующий уровень
-                    currentLevel++;
-                    Progress.Instance.PlayerInfo.Level = currentLevel;
-                    // Включаем флаг "isWhite" в спаунере рыб текущего уровня
-                    if (currentLevel < fishSpawner.Length)
+                    if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
                     {
-                        fishSpawner[currentLevel].IsWhiteSwitch();
+                        int fishValue = fishValuesList[currentLevel].Value.fishValue;
+                        // Скрываем объекты "Red" для всех рыб текущего уровня
+                        HideRedObjectsIfScoreMet(fishValue);
+                        FishVerticalControl(fishValue); // Метод нужет только для создания события для после изменения уровня
+                        // Переходим на следующий уровень
+                        currentLevel++;
+                        Progress.Instance.PlayerInfo.Level = currentLevel;
+                        // Включаем флаг "isWhite" в спаунере рыб текущего уровня
+                        if (currentLevel < fishSpawner.Length)
+                        {
+                            fishSpawner[currentLevel].IsWhiteSwitch();
+                        }
                     }
-                }
-            UpdateBackgroundPosition();
+                UpdateBackgroundPosition();
+            }
         }
     }
     private void HideRedObjectsIfScoreMet(int fishValue)
@@ -152,11 +166,40 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        Score.instance.UpdateGold();
-        SceneManager.LoadScene("2_GameOverScene");
-        Time.timeScale = 0;
-    }
+        //SceneManager.LoadScene("2_GameOverScene");
 
+        // Останавливаем музыку
+        if (gameMusic != null)
+        {
+            //gameMusic.Stop();
+        }
+
+        Time.timeScale = 0;
+        Score.instance.UpdateGold();
+        // Проверяем, если панель уже не создана
+        if (gameOverInstance == null)
+        {
+            gameOverInstance = Instantiate(gameOverPrefab);
+        }
+    }
+    public void ResumeGame()
+    {
+        // Проверяем, существует ли панель на сцене
+        if (gameOverInstance != null)
+        {
+            // Уничтожаем панель
+            Destroy(gameOverInstance);
+            gameOverInstance = null;
+
+            Time.timeScale = 1;
+            gameOver = false;
+
+            if (gameMusic != null)
+            {
+                gameMusic.Play();
+            }
+        }
+    }
     public void Replay()
     {
         SceneManager.LoadScene(1);
