@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class FlyBehavior : MonoBehaviour
 {
-    private float moveSpeed = 3f;  // Скорость перемещения
+    private float moveSpeed = 2f;  // Скорость перемещения
     private float lerpSpeed = 0.03f;  // Коэффициент для плавного движения
+
     [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject deadPrefab;
-    [SerializeField] private float destroyDelay = 1f;  // Время, через которое уничтожается объект
+    private float destroyDelay = 1f;  // Время, через которое уничтожается объект
 
     [SerializeField] private Transform cameraTransform;  // Ссылка на камеру
-    [SerializeField] private float upperScreenThreshold = 0.75f; // Порог по высоте для сдвига фона (75% экрана)
-    [SerializeField] private float lowerScreenThreshold = 0.25f; // Порог по высоте для возврата фона (25% экрана)
-    [SerializeField] private float cameraMoveSpeed = 2f;  // Скорость движения фона
+    private float upperScreenThreshold = 0.75f; // Порог по высоте для сдвига фона (75% экрана)
+    private float lowerScreenThreshold = 0.25f; // Порог по высоте для возврата фона (25% экрана)
+    private float cameraMoveSpeed = 2f;  // Скорость движения фона
 
     private Rigidbody2D _rb;
     private Transform _tr;
@@ -84,7 +85,7 @@ public class FlyBehavior : MonoBehaviour
         targetPosition.y = Mathf.Lerp(_tr.position.y, mousePosition.y, lerpSpeed);
 
         // Ограничиваем движение по оси X границами экрана
-        targetPosition.x = Mathf.Clamp(targetPosition.x, -10f, 10f); // Примерные границы по X, можно подстроить
+        targetPosition.x = Mathf.Clamp(targetPosition.x, -2.2f, 2.2f); // Примерные границы по X, можно подстроить
         // Ограничиваем движение по высоте в зависимости от maxPlayerHeight
         targetPosition.y = Mathf.Clamp(targetPosition.y, -1f, maxPlayerHeight);
 

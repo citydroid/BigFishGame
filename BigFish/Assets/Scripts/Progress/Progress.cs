@@ -10,6 +10,7 @@ public class PlayerInfo
     public int Speed;
     public int Gold;
     public int Level;
+    public int Lives;
 
 }
 

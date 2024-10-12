@@ -38,6 +38,8 @@ public class FishSpawner : MonoBehaviour
             SpawnFish();
             _timer = 0;
         }
+
+        maxHeight += depthCoeff;
     }
 
     private void SpawnFish()

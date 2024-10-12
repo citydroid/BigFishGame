@@ -33,15 +33,15 @@ public class GameManager : MonoBehaviour
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
-        { "Fish_2", (2, 1) },
-        { "Fish_10", (10, 5) },
-        { "Fish_50", (50, 10) },
-        { "Fish_150", (150, 15) },
-        { "Fish_250", (250, 22) },
-        { "Fish_375", (375, 25) },
-        { "Fish_500", (500, 30) },
-        { "Fish_1000", (1000, 35) },
-        { "Fish_2250", (2250, 40) }
+        { "Fish_1", (2, 1) },
+        { "Fish_2", (10, 5) },
+        { "Fish_3", (50, 10) },
+        { "Fish_4", (150, 15) },
+        { "Fish_5", (250, 22) },
+        { "Fish_6", (375, 25) },
+        { "Fish_7", (500, 30) },
+        { "Fish_8", (1000, 35) },
+        { "Fish_9", (2250, 40) }
     };
     private List<KeyValuePair<string, (int fishValue, int scoreAdd)>> fishValuesList;
 
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 2f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
         new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 2f, 1, 0f, 1f) }),
         new LevelSettings(100, new[] { (1, 3f, 2, 0f, 1f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 1f, 2, 0f, 3f) }),
-        new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 3f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
+        new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 3f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 0f, 0, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
         new LevelSettings(250, new[] { (1, 1f, 1, 1f, 3f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
         new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 0f) }),
         new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (8, 3f, 3, 0.5f, 1f) }) 
@@ -94,12 +94,14 @@ public class GameManager : MonoBehaviour
 
                     if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
                     {
+                    Debug.Log("currentLevel " + currentLevel);
                         int fishValue = fishValuesList[currentLevel].Value.fishValue;
-                        // Скрываем объекты "Red" для всех рыб текущего уровня
-                        HideRedObjectsIfScoreMet(fishValue);
-                        FishVerticalControl(fishValue); // Метод нужет только для создания события для после изменения уровня
                         // Переходим на следующий уровень
                         currentLevel++;
+                        // Скрываем объекты "Red" для всех рыб текущего уровня
+                        HideRedObjectsIfScoreMet(currentLevel,fishValue);
+                        FishVerticalControl(currentLevel); // Метод нужет только для создания события для после изменения уровня
+
                         Progress.Instance.PlayerInfo.Level = currentLevel;
                         // Включаем флаг "isWhite" в спаунере рыб текущего уровня
                         if (currentLevel < fishSpawner.Length)
@@ -111,10 +113,10 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    private void HideRedObjectsIfScoreMet(int fishValue)
+    private void HideRedObjectsIfScoreMet(int fishLevel, int fishValue)
     {
         // Логика для скрытия объектов "Red"
-        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishValue}");
+        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishLevel}");
 
         foreach (GameObject fish in allFishObjects)
         {

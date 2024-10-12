@@ -23,7 +23,7 @@ public class ProgressSceneButton : MonoBehaviour
 
         //Progress.Instance.SavePlayerInfo();
 
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(2);
     }
 
     void OnMouseEnter()

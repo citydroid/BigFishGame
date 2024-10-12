@@ -6,16 +6,37 @@ TagManager:
   tags:
   - Collectible
   - FishAnimation
-  - Fish_2
-  - Fish_10
-  - Fish_50
-  - Fish_150
-  - Fish_250
-  - Fish_375
-  - Fish_500
-  - Fish_1000
-  - Fish_1
   - Bottom
+  - Fish_1
+  - Fish_2
+  - Fish_3
+  - Fish_4
+  - Fish_5
+  - Fish_6
+  - Fish_7
+  - Fish_8
+  - Fish_9
+  - Fish_10
+  - Fish_11
+  - Fish_12
+  - Fish_13
+  - Fish_14
+  - Fish_15
+  - Fish_16
+  - Fish_17
+  - Fish_18
+  - Fish_19
+  - Fish_20
+  - Fish_21
+  - Fish_22
+  - Fish_23
+  - Fish_24
+  - Fish_25
+  - Fish_26
+  - Fish_27
+  - Fish_28
+  - Fish_29
+  - Fish_30
   layers:
   - Default
   - TransparentFX

@@ -292,6 +292,7 @@ MonoBehaviour:
     Speed: 0
     Gold: 0
     Level: 0
+    Lives: 0
 --- !u!4 &62149589
 Transform:
   m_ObjectHideFlags: 0
@@ -402,7 +403,7 @@ GameObject:
   - component: {fileID: 290441178}
   - component: {fileID: 290441179}
   m_Layer: 0
-  m_Name: Fish_500_spawn
+  m_Name: Fish_7_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,7 +454,7 @@ GameObject:
   - component: {fileID: 382107688}
   - component: {fileID: 382107689}
   m_Layer: 0
-  m_Name: Fish_50_spawn
+  m_Name: Fish_3_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -775,7 +776,7 @@ GameObject:
   - component: {fileID: 500918049}
   - component: {fileID: 500918050}
   m_Layer: 0
-  m_Name: 'Fish_250_spawn '
+  m_Name: 'Fish_5_spawn '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -826,7 +827,7 @@ GameObject:
   - component: {fileID: 501459937}
   - component: {fileID: 501459938}
   m_Layer: 0
-  m_Name: Fish_150_spawn
+  m_Name: Fish_4_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1045,7 +1046,7 @@ GameObject:
   - component: {fileID: 651895683}
   - component: {fileID: 651895684}
   m_Layer: 0
-  m_Name: Fish_1000_spawn
+  m_Name: Fish_8_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1241,7 +1242,7 @@ GameObject:
   - component: {fileID: 780628550}
   - component: {fileID: 780628551}
   m_Layer: 0
-  m_Name: 'Fish_375_spawn '
+  m_Name: 'Fish_6_spawn '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1292,7 +1293,7 @@ GameObject:
   - component: {fileID: 879224426}
   - component: {fileID: 879224427}
   m_Layer: 0
-  m_Name: Fish_10_spawn
+  m_Name: Fish_2_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2069,11 +2070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1150426555}
   deadPrefab: {fileID: 7456667784847191287, guid: c624eb307e4c49b49992d7224271faf8, type: 3}
-  destroyDelay: 1
   cameraTransform: {fileID: 519420032}
-  upperScreenThreshold: 0.75
-  lowerScreenThreshold: 0.25
-  cameraMoveSpeed: 2
 --- !u!95 &1273661118
 Animator:
   serializedVersion: 4
@@ -3155,7 +3152,7 @@ GameObject:
   - component: {fileID: 2037402595}
   - component: {fileID: 2037402594}
   m_Layer: 0
-  m_Name: Fish_2_spawn
+  m_Name: Fish_1_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
