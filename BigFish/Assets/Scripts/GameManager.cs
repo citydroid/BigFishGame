@@ -12,8 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform backgroundTransform;
     [SerializeField] private TerraWaveSpawner groundSpawner1;
     [SerializeField] private TerraWaveSpawner groundSpawner2;
-    private TerraWaveSpawner colorGround1;
-    private TerraWaveSpawner colorGround2;
+    [SerializeField] private BackgroundManager backgroundManager;
 
     [SerializeField] private GameObject gameOverPrefab;
     private GameObject gameOverInstance;
@@ -23,7 +22,7 @@ public class GameManager : MonoBehaviour
     public AudioSource gameMusic;
 
     private readonly bool[] isWhiteDo = new bool[30];
-    private readonly bool[] hasIncreasedSpawn =  new bool[30];
+    private readonly bool[] hasIncreasedSpawn = new bool[30];
 
     private bool _isSceneChanging = false;
     private int currentLevel = 1;
@@ -57,7 +56,7 @@ public class GameManager : MonoBehaviour
         new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 3f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 0f, 0, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
         new LevelSettings(250, new[] { (1, 1f, 1, 1f, 3f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
         new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 0f) }),
-        new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (8, 3f, 3, 0.5f, 1f) }) 
+        new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (8, 3f, 3, 0.5f, 1f) })
 
     };
     public void Start()
@@ -70,9 +69,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            backgroundTransform.position = new Vector3(backgroundTransform.position.x, startBackgroundPosition, backgroundTransform.position.z);
-            colorGround1 = groundSpawner1.GetComponent<TerraWaveSpawner>();
-            colorGround2 = groundSpawner2.GetComponent<TerraWaveSpawner>();
+            backgroundManager.Initialize(backgroundTransform, groundSpawner1, groundSpawner2, depthCoeff, maxPlayerHeight);
         }
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -82,7 +79,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        if (_isSceneChanging) return; 
+        if (_isSceneChanging) return;
 
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
@@ -92,23 +89,23 @@ public class GameManager : MonoBehaviour
                 // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
                 ProcessLevelProgress(currentScore);
 
-                    if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
-                    {
+                if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
+                {
                     Debug.Log("currentLevel " + currentLevel);
-                        int fishValue = fishValuesList[currentLevel].Value.fishValue;
-                        // Переходим на следующий уровень
-                        currentLevel++;
-                        // Скрываем объекты "Red" для всех рыб текущего уровня
-                        HideRedObjectsIfScoreMet(currentLevel,fishValue);
-                        FishVerticalControl(currentLevel); // Метод нужет только для создания события для после изменения уровня
+                    int fishValue = fishValuesList[currentLevel].Value.fishValue;
+                    // Переходим на следующий уровень
+                    currentLevel++;
+                    // Скрываем объекты "Red" для всех рыб текущего уровня
+                    HideRedObjectsIfScoreMet(currentLevel, fishValue);
+                    FishVerticalControl(currentLevel); // Метод нужет только для создания события для после изменения уровня
 
-                        Progress.Instance.PlayerInfo.Level = currentLevel;
-                        // Включаем флаг "isWhite" в спаунере рыб текущего уровня
-                        if (currentLevel < fishSpawner.Length)
-                        {
-                            fishSpawner[currentLevel].IsWhiteSwitch();
-                        }
+                    Progress.Instance.PlayerInfo.Level = currentLevel;
+                    // Включаем флаг "isWhite" в спаунере рыб текущего уровня
+                    if (currentLevel < fishSpawner.Length)
+                    {
+                        fishSpawner[currentLevel].IsWhiteSwitch();
                     }
+                }
                 UpdateBackgroundPosition();
             }
         }
@@ -138,7 +135,7 @@ public class GameManager : MonoBehaviour
         Vector3 playerPosition = playerObject.transform.position;
         foreach (GameObject fish in allFishObjects)
         {
-           // fish.GetComponent<FishMover>().SetVerticalSpeed(playerPosition.y + 1f);
+            // fish.GetComponent<FishMover>().SetVerticalSpeed(playerPosition.y + 1f);
             fish.GetComponent<FishMover>().SetMaxVertical(maxPlayerHeight);
         }
     }
@@ -151,14 +148,13 @@ public class GameManager : MonoBehaviour
         {
             ApplyLevelSettings(settings);
             //UpdateBackgroundPosition();
-            hasIncreasedSpawn[currentLevel] = true; 
+            hasIncreasedSpawn[currentLevel] = true;
             foreach (FishSpawner fish in fishSpawner)
             {
                 fish.GetComponent<FishSpawner>().SetMaxHeght(maxPlayerHeight, depthCoeff);
             }
         }
     }
-
     private void ApplyLevelSettings(LevelSettings settings)
     {
         foreach (var (spawnerIndex, spawnRate, spawnAmount, hightMin, hightMax) in settings.SpawnActions)
@@ -168,8 +164,6 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        //SceneManager.LoadScene("2_GameOverScene");
-
         // Останавливаем музыку
         if (gameMusic != null)
         {
@@ -225,13 +219,8 @@ public class GameManager : MonoBehaviour
     }
     private void UpdateBackgroundPosition()
     {
-            Vector3 newPosition = backgroundTransform.position;
-            newPosition.y += depthCoeff;
-            backgroundTransform.position = newPosition;
-            maxPlayerHeight += depthCoeff;
-
-        colorGround1.ChangeGrayLevel(depthCoeff / 5);
-        colorGround2.ChangeGrayLevel(depthCoeff / 5);
+        backgroundManager.UpdateBackgroundPosition();
+        maxPlayerHeight = backgroundManager.GetMaxPlayerHeight();
     }
 }
 

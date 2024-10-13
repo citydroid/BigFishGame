@@ -15,7 +15,6 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private bool isWhite = false;
     [SerializeField] private GameManager gameManager;
 
-
     private float _timer = 0f;
     private GameObject _baseObject;
     private float heightStoper = 1;
@@ -56,6 +55,20 @@ public class FishSpawner : MonoBehaviour
 
             //fishMover.SetDepth(maxHeight,depthCoeff);
             newFish.GetComponent<FishMover>().SetDepth(maxHeight, depthCoeff);
+
+            //Ищем Fish и задаём случайный размер в процентах от существующего
+            Transform scaleTransform = newFish.transform.Find("Fish");
+
+            if (scaleTransform != null)
+            {
+                // Получаем текущий масштаб объекта Fish
+                Vector3 currentScale = scaleTransform.localScale;
+                float randCoef = Random.Range(0.6f, 1f);// Масштаб X от 60% до 100%
+                float randomScaleX = currentScale.x * randCoef;  
+                float randomScaleY = currentScale.y * randCoef;
+
+                scaleTransform.localScale = new Vector3(randomScaleX, randomScaleY, currentScale.z);
+            }
 
             if (isWhite)
             {
