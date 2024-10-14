@@ -9,25 +9,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerObject;
     [SerializeField] private FishSpawner[] fishSpawner;
 
-    [SerializeField] private Transform backgroundTransform;
-    [SerializeField] private TerraWaveSpawner groundSpawner1;
-    [SerializeField] private TerraWaveSpawner groundSpawner2;
-    [SerializeField] private BackgroundManager backgroundManager;
-
     [SerializeField] private GameObject gameOverPrefab;
     private GameObject gameOverInstance;
-    private CanvasGroup canvasGroup;
-    private float fadeDuration = 1f;
     private bool gameOver = false;
     public AudioSource gameMusic;
 
-    private readonly bool[] isWhiteDo = new bool[30];
+    [SerializeField] private BackgroundManager backgroundManager;
+
     private readonly bool[] hasIncreasedSpawn = new bool[30];
 
     private bool _isSceneChanging = false;
     private int currentLevel = 1;
-    private float maxPlayerHeight = -0.5f; //4f
-    private readonly float startBackgroundPosition = -2.5f; //1f
+    private float maxPlayerHeight; //4f
     private float depthCoeff = 0.0002f;
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
@@ -50,11 +43,11 @@ public class GameManager : MonoBehaviour
         // Настройки для уровня 0 (# рыбы, пауза между спаунами, количество рыбы за спаун, мин.высота, макс.высота)
         new LevelSettings(0, new[] { (1, 2f, 1, 0f, 1f), (2, 5f, 1, 0f, 0.1f) }),
         new LevelSettings(3, new[] { (1, 5f, 10, 0f, 1f) }),
-        new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 2f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
+        new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 5f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
         new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 2f, 1, 0f, 1f) }),
-        new LevelSettings(100, new[] { (1, 3f, 2, 0f, 1f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 1f, 2, 0f, 3f) }),
-        new LevelSettings(150, new[] { (1, 0.5f, 3, 0f, 3f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 0f, 0, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
-        new LevelSettings(250, new[] { (1, 1f, 1, 1f, 3f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
+        new LevelSettings(100, new[] { (1, 3f, 2, 3f, 10f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 1f, 2, 0f, 3f) }),
+        new LevelSettings(150, new[] { (1, 0.5f, 3, 4f, 10f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 0f, 0, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
+        new LevelSettings(250, new[] { (1, 1f, 1, 5f, 15f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
         new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 0f) }),
         new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (8, 3f, 3, 0.5f, 1f) })
 
@@ -69,8 +62,18 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            backgroundManager.Initialize(backgroundTransform, groundSpawner1, groundSpawner2, depthCoeff, maxPlayerHeight);
+            backgroundManager.Initialize(depthCoeff);
         }
+
+        // Получаем текущее разрешение экрана
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+        // Соотношение сторон экрана
+        float aspectRatio = screenWidth / screenHeight;
+        // Базовый коэффициент перемещения, используемый для нормализации скорости
+        float normalizedSpeed = depthCoeff * screenWidth / 1920f; // 1920 - базовое разрешение (например, для Full HD)
+        Debug.Log("normalizedSpeed " + normalizedSpeed + " aspectRatio " + aspectRatio + " screenWidth " + screenWidth);
+      //  depthCoeff = normalizedSpeed;
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -85,90 +88,92 @@ public class GameManager : MonoBehaviour
         {
             if (!gameOver)
             {
-                int currentScore = Score.instance.GetScore();
-                // Проверяем, если очки игрока достигли следующего fishValue для текущего уровня
-                ProcessLevelProgress(currentScore);
-
-                if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
+                if (SceneManager.GetActiveScene().buildIndex == 1)
                 {
-                    Debug.Log("currentLevel " + currentLevel);
-                    int fishValue = fishValuesList[currentLevel].Value.fishValue;
-                    // Переходим на следующий уровень
-                    currentLevel++;
-                    // Скрываем объекты "Red" для всех рыб текущего уровня
-                    HideRedObjectsIfScoreMet(currentLevel, fishValue);
-                    FishVerticalControl(currentLevel); // Метод нужет только для создания события для после изменения уровня
+                    int currentScore = Score.instance.GetScore();
+                    ProcessLevelProgress(currentScore);
 
-                    Progress.Instance.PlayerInfo.Level = currentLevel;
-                    // Включаем флаг "isWhite" в спаунере рыб текущего уровня
-                    if (currentLevel < fishSpawner.Length)
+                    if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
                     {
-                        fishSpawner[currentLevel].IsWhiteSwitch();
+                        ProgressToNextLevel();
+                    }
+
+                    UpdateBackgroundPosition();
+                }
+            }
+        }
+    }
+            private void ProcessLevelProgress(int currentScore)
+            {
+                if (currentLevel >= levelSettings.Count) return;
+
+                var settings = levelSettings[currentLevel];
+                if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
+                {
+                    ApplyLevelSettings(settings);
+                    hasIncreasedSpawn[currentLevel] = true;
+                    UpdateFishSpawners();
+                }
+            }
+
+            private void ProgressToNextLevel()
+            {
+                currentLevel++;
+                Progress.Instance.PlayerInfo.Level = currentLevel;
+
+                if (currentLevel < fishSpawner.Length)
+                {
+                    fishSpawner[currentLevel].IsWhiteSwitch();
+                }
+
+                HideRedObjects(currentLevel);
+                AdjustFishVerticalControl(currentLevel);
+            }
+
+            private void UpdateFishSpawners()
+            {
+                foreach (FishSpawner spawner in fishSpawner)
+                {
+                    spawner.SetMaxHeght(maxPlayerHeight, depthCoeff);
+                }
+            }
+
+            private void ApplyLevelSettings(LevelSettings settings)
+            {
+                foreach (var (spawnerIndex, spawnRate, spawnAmount, hightMin, hightMax) in settings.SpawnActions)
+                {
+                    fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount, hightMin, hightMax);
+                }
+            }
+
+            private void HideRedObjects(int fishLevel)
+            {
+                GameObject[] fishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishLevel}");
+
+                foreach (GameObject fish in fishObjects)
+                {
+                    Transform redTransform = fish.transform.Find("Red");
+                    if (redTransform != null)
+                    {
+                        redTransform.gameObject.SetActive(false);
                     }
                 }
-                UpdateBackgroundPosition();
             }
-        }
-    }
-    private void HideRedObjectsIfScoreMet(int fishLevel, int fishValue)
-    {
-        // Логика для скрытия объектов "Red"
-        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishLevel}");
 
-        foreach (GameObject fish in allFishObjects)
-        {
-            if (Score.instance.GetScore() >= fishValue)
+            private void AdjustFishVerticalControl(int fishLevel)
             {
-                Transform redTransform = fish.transform.Find("Red");
-                if (redTransform != null)
+                GameObject[] fishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishLevel}");
+                foreach (GameObject fish in fishObjects)
                 {
-                    GameObject redObject = redTransform.gameObject;
-                    redObject.SetActive(false);
+                    fish.GetComponent<FishMover>().SetMaxVertical(maxPlayerHeight);
                 }
             }
-        }
-    }
-    private void FishVerticalControl(int fishValue)
-    {
-        // Логика для скрытия объектов "Red"
-        GameObject[] allFishObjects = GameObject.FindGameObjectsWithTag($"Fish_{fishValue}");
-        Vector3 playerPosition = playerObject.transform.position;
-        foreach (GameObject fish in allFishObjects)
-        {
-            // fish.GetComponent<FishMover>().SetVerticalSpeed(playerPosition.y + 1f);
-            fish.GetComponent<FishMover>().SetMaxVertical(maxPlayerHeight);
-        }
-    }
-    private void ProcessLevelProgress(int currentScore)
-    {
-        if (currentLevel >= levelSettings.Count) return;
 
-        var settings = levelSettings[currentLevel];
-        if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
-        {
-            ApplyLevelSettings(settings);
-            //UpdateBackgroundPosition();
-            hasIncreasedSpawn[currentLevel] = true;
-            foreach (FishSpawner fish in fishSpawner)
-            {
-                fish.GetComponent<FishSpawner>().SetMaxHeght(maxPlayerHeight, depthCoeff);
-            }
-        }
-    }
-    private void ApplyLevelSettings(LevelSettings settings)
-    {
-        foreach (var (spawnerIndex, spawnRate, spawnAmount, hightMin, hightMax) in settings.SpawnActions)
-        {
-            fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount, hightMin, hightMax);
-        }
-    }
+
     public void GameOver()
     {
         // Останавливаем музыку
-        if (gameMusic != null)
-        {
-            //gameMusic.Stop();
-        }
+      //  if (gameMusic != null)   gameMusic.Stop(); 
 
         Time.timeScale = 0;
         Score.instance.UpdateGold();
@@ -180,20 +185,13 @@ public class GameManager : MonoBehaviour
     }
     public void ResumeGame()
     {
-        // Проверяем, существует ли панель на сцене
         if (gameOverInstance != null)
         {
-            // Уничтожаем панель
             Destroy(gameOverInstance);
             gameOverInstance = null;
-
             Time.timeScale = 1;
             gameOver = false;
-
-            if (gameMusic != null)
-            {
-                gameMusic.Play();
-            }
+            gameMusic?.Play();
         }
     }
     public void Replay()

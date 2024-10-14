@@ -285,10 +285,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3791a8681b359ad41af10e46a6ae2062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeed: 0.5
-  maxSpeed: 1.5
+  minSpeed: 0.1
+  maxSpeed: 0.5
   minVertSpeed: 0
   maxVertSpeed: 0
+  fishTransform: {fileID: 248014154813215576}
 --- !u!61 &3544300206290130750
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -733,9 +734,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6760686719698536309}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.17495728, y: 0.17495728, z: 0.17495728}
+  m_LocalScale: {x: -0.1749573, y: 0.17495728, z: 0.17495728}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2106205615396271953}

@@ -2,21 +2,17 @@ using UnityEngine;
 
 public class BackgroundManager : MonoBehaviour
 {
-    private Transform backgroundTransform;
-    private TerraWaveSpawner groundSpawner1;
-    private TerraWaveSpawner groundSpawner2;
+    [SerializeField] private Transform backgroundTransform;
+    [SerializeField] private TerraWaveSpawner groundSpawner1;
+    [SerializeField] private TerraWaveSpawner groundSpawner2;
     private TerraWaveSpawner colorGround1;
     private TerraWaveSpawner colorGround2;
     private float depthCoeff;
-    private float maxPlayerHeight;
+    private float maxPlayerHeight = -0.5f;
 
-    public void Initialize(Transform background, TerraWaveSpawner spawner1, TerraWaveSpawner spawner2, float initialDepthCoeff, float initialMaxHeight)
+    public void Initialize(float initialDepthCoeff)
     {
-        backgroundTransform = background;
-        groundSpawner1 = spawner1;
-        groundSpawner2 = spawner2;
         depthCoeff = initialDepthCoeff;
-        maxPlayerHeight = initialMaxHeight;
     }
 
     public void UpdateBackgroundPosition()

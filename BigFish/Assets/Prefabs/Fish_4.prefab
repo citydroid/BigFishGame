@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 1994778525019185881}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0051, y: 0.0309, z: 0}
-  m_LocalScale: {x: 0.059662543, y: 0.059662543, z: 0.059662543}
+  m_LocalScale: {x: -0.05966254, y: 0.059662543, z: 0.059662543}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1473965693043333861}
@@ -243,6 +243,7 @@ MonoBehaviour:
   maxSpeed: 1.5
   minVertSpeed: 0
   maxVertSpeed: 0.1
+  fishTransform: {fileID: 8700711311848640959}
 --- !u!61 &382303633878508531
 BoxCollider2D:
   m_ObjectHideFlags: 0

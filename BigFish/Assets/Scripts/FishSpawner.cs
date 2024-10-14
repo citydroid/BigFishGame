@@ -63,7 +63,7 @@ public class FishSpawner : MonoBehaviour
             {
                 // Получаем текущий масштаб объекта Fish
                 Vector3 currentScale = scaleTransform.localScale;
-                float randCoef = Random.Range(0.6f, 1f);// Масштаб X от 60% до 100%
+                float randCoef = Random.Range(0.7f, 1f);// Масштаб X от 60% до 100%
                 float randomScaleX = currentScale.x * randCoef;  
                 float randomScaleY = currentScale.y * randCoef;
 

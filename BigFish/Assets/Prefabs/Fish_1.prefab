@@ -289,6 +289,7 @@ MonoBehaviour:
   maxSpeed: 1.5
   minVertSpeed: 0
   maxVertSpeed: 0
+  fishTransform: {fileID: 4558982586368053268}
 --- !u!61 &3544300206290130750
 BoxCollider2D:
   m_ObjectHideFlags: 0

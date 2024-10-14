@@ -11,11 +11,15 @@ namespace Movers
         [SerializeField] private float minVertSpeed = 0f;
         [SerializeField] private float maxVertSpeed = 0f;
         protected float _verticalSpeed;
+        protected bool mirrorFish = false;
 
-        protected readonly float targetX = -5f;
+        protected readonly float targetLeftX = -5f;
+        protected readonly float targetRightX = 5f;
         protected float _maxVertical;
         protected float _minVertical = -1f;
         protected float depthCoeff = 0.0002f;
+
+        [SerializeField] private Transform fishTransform;
 
         private bool playGame = true;
 
@@ -33,11 +37,13 @@ namespace Movers
 
                 Mover();
 
+                MirrorFish(_horizontalSpeed);
+
                 // Обновляем позицию рыбы с учетом горизонтальной и вертикальной скорости
                 transform.position += new Vector3(-_horizontalSpeed, _verticalSpeed, 0) * Time.deltaTime;
 
                 // Уничтожаем объект, если он выходит за пределы экрана
-                if (transform.position.x <= targetX)
+                if (transform.position.x <= targetLeftX || transform.position.x >= targetRightX)
                 {
                     Destroy(gameObject);
                 }
@@ -48,8 +54,24 @@ namespace Movers
         {
             _verticalSpeed = 0;
         }
+        private void MirrorFish(float horizontalSpeed)
+        {
+            if (horizontalSpeed > 0 && mirrorFish)
+            {
+                Vector3 currentScale = fishTransform.localScale;
+                currentScale.x = -currentScale.x;
+                fishTransform.localScale = new Vector3(currentScale.x, currentScale.y, currentScale.z);
+                mirrorFish = false;
+            }
+            else if (horizontalSpeed < 0 && !mirrorFish)
+            {
+                Vector3 currentScale = fishTransform.localScale;
+                currentScale.x = -currentScale.x;
+                fishTransform.localScale = new Vector3(currentScale.x, currentScale.y, currentScale.z);
+                mirrorFish = true;
+            }
 
-
+        }
 
         // Публичный метод для задания максимальной высоты
         public void SetMaxVertical(float maxValue)
