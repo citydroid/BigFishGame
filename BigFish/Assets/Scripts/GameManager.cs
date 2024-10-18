@@ -16,11 +16,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private BackgroundManager backgroundManager;
 
-    private readonly bool[] hasIncreasedSpawn = new bool[30];
-
     private bool _isSceneChanging = false;
-    private int currentLevel = 1;
-    private float maxPlayerHeight; //4f
+    private int currentFishLevel = 1;
+    private float maxPlayerHeight; 
     private float depthCoeff = 0.0002f;
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
@@ -30,26 +28,28 @@ public class GameManager : MonoBehaviour
         { "Fish_3", (50, 10) },
         { "Fish_4", (150, 15) },
         { "Fish_5", (250, 22) },
-        { "Fish_6", (375, 25) },
-        { "Fish_7", (500, 30) },
-        { "Fish_8", (1000, 35) },
-        { "Fish_9", (2250, 40) }
+        { "Fish_6", (500, 25) },
+        { "Fish_7", (1000, 30) },
+        { "Fish_8", (2000, 35) },
+        { "Fish_9", (5050, 40) }
     };
     private List<KeyValuePair<string, (int fishValue, int scoreAdd)>> fishValuesList;
 
-    // Список настроек уровней
+    // Список настроек уровней и флаг для контроля их использования
+    private readonly bool[] hasIncreasedSpawn = new bool[30];
+    private int currentLevel = 0;
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
         // Настройки для уровня 0 (# рыбы, пауза между спаунами, количество рыбы за спаун, мин.высота, макс.высота)
-        new LevelSettings(0, new[] { (1, 2f, 1, 0f, 1f), (2, 5f, 1, 0f, 0.1f) }),
-        new LevelSettings(3, new[] { (1, 5f, 10, 0f, 1f) }),
-        new LevelSettings(10, new[] { (1, 1f, 1, 0.5f, 5f), (2, 3f, 1, 0f, 0.1f), (3, 5f, 2, 0f, 1f) }),
-        new LevelSettings(50, new[] { (2, 10f, 1, 0f, 1f), (3, 10f, 1, 0f, 1f), (4, 2f, 1, 0f, 1f) }),
-        new LevelSettings(100, new[] { (1, 3f, 2, 3f, 10f), (2, 3f, 1, 0f, 0.1f), (4, 5f, 1, 0f, 1f), (5, 1f, 2, 0f, 3f) }),
-        new LevelSettings(150, new[] { (1, 0.5f, 3, 4f, 10f), (2, 1f, 1, 0f, 1f), (3, 3f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 0f, 0, 0f, 1f), (6, 1f, 3, 0f, 5f) }),
-        new LevelSettings(250, new[] { (1, 1f, 1, 5f, 15f), (2, 0f, 0, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (6, 1f, 1, 2f, 5f) }),
-        new LevelSettings(375, new[] { (3, 1f, 3, 0f, 1f), (4, 1f, 1, 0f, 1f), (5, 1f, 1, 0f, 1f), (7, 3f, 3, 0f, 0f) }),
-        new LevelSettings(500, new[] { (2, 2f, 1, 0f, 1f), (3, 1f, 1, 0f, 1f), (4, 1f, 1, 0f, 1f), (8, 3f, 3, 0.5f, 1f) })
+        new LevelSettings(0, -1f, new[] { (1, 2f, 1, 2), (2, 5f, 1, 1) }),
+        new LevelSettings(3, -1f, new[] { (1, 5f, 10, 2) }),
+        new LevelSettings(10, -1f, new[] { (1, 1f, 1, 3), (2, 3f, 1, 1), (3, 5f, 2, 3) }),
+        new LevelSettings(50, -1f, new[] { (2, 10f, 1, 1), (3, 10f, 1, 3), (4, 2f, 1, 3) }),
+        new LevelSettings(100, -1f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (4, 5f, 1,3), (5, 1f, 2, 5),(8, 1f, 1, 6) }),
+        new LevelSettings(150, -1f, new[] { (1, 0.5f, 3, 5), (2, 1f, 1, 1), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 0f, 0, 0), (6, 1f, 3, 5) }),
+        new LevelSettings(300, 1f, new[] { (1, 5f, 10, 6), (2, 0f, 0, 1), (3, 1f, 1,4), (4, 1f, 1, 4), (5, 1f, 1, 4), (6, 0f, 0, 0), (7, 1f, 1, 1) }),
+        new LevelSettings(500, 1f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
+        new LevelSettings(1000, 1f, new[] { (2, 2f, 1, 1), (3, 1f, 1, 4), (4, 1f, 1, 5), (8, 3f, 3, 4) })
 
     };
     public void Start()
@@ -64,16 +64,6 @@ public class GameManager : MonoBehaviour
         {
             backgroundManager.Initialize(depthCoeff);
         }
-
-        // Получаем текущее разрешение экрана
-        float screenWidth = Screen.width;
-        float screenHeight = Screen.height;
-        // Соотношение сторон экрана
-        float aspectRatio = screenWidth / screenHeight;
-        // Базовый коэффициент перемещения, используемый для нормализации скорости
-        float normalizedSpeed = depthCoeff * screenWidth / 1920f; // 1920 - базовое разрешение (например, для Full HD)
-        Debug.Log("normalizedSpeed " + normalizedSpeed + " aspectRatio " + aspectRatio + " screenWidth " + screenWidth);
-      //  depthCoeff = normalizedSpeed;
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -84,67 +74,55 @@ public class GameManager : MonoBehaviour
     {
         if (_isSceneChanging) return;
 
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().buildIndex == 1 && !gameOver)
         {
-            if (!gameOver)
+            int currentScore = Score.instance.GetScore();
+            ProcessLevelProgress(currentScore);
+
+            if (currentScore >= fishValuesList[currentFishLevel].Value.fishValue)
             {
-                if (SceneManager.GetActiveScene().buildIndex == 1)
-                {
-                    int currentScore = Score.instance.GetScore();
-                    ProcessLevelProgress(currentScore);
-
-                    if (currentScore >= fishValuesList[currentLevel].Value.fishValue)
-                    {
-                        ProgressToNextLevel();
-                    }
-
-                    UpdateBackgroundPosition();
-                }
+                ProgressToNextLevel();
             }
+
+            UpdateBackgroundPosition();
         }
     }
-            private void ProcessLevelProgress(int currentScore)
-            {
-                if (currentLevel >= levelSettings.Count) return;
+    private void ProcessLevelProgress(int currentScore)
+    {
+        if (currentLevel >= levelSettings.Count) return;
 
-                var settings = levelSettings[currentLevel];
-                if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
+        var settings = levelSettings[currentLevel];
+        if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
+        {
+Debug.Log("RequiredScore:  " + settings.RequiredScore + "  LevelScore: " + settings.LevelScore);
+            //BackgroundProgressControl(settings.LevelScore);
+            ApplyLevelSettings(settings);
+            hasIncreasedSpawn[currentLevel] = true;
+            currentLevel++;
+        }
+    }
+
+     private void ProgressToNextLevel()
+     {
+        currentFishLevel++;
+         Progress.Instance.PlayerInfo.Level = currentFishLevel;
+
+                if (currentFishLevel < fishSpawner.Length)
                 {
-                    ApplyLevelSettings(settings);
-                    hasIncreasedSpawn[currentLevel] = true;
-                    UpdateFishSpawners();
-                }
-            }
-
-            private void ProgressToNextLevel()
-            {
-                currentLevel++;
-                Progress.Instance.PlayerInfo.Level = currentLevel;
-
-                if (currentLevel < fishSpawner.Length)
-                {
-                    fishSpawner[currentLevel].IsWhiteSwitch();
+                    fishSpawner[currentFishLevel].IsWhiteSwitch();
                 }
 
-                HideRedObjects(currentLevel);
-                AdjustFishVerticalControl(currentLevel);
-            }
+                HideRedObjects(currentFishLevel);
+                AdjustFishVerticalControl(currentFishLevel);
+     }
 
-            private void UpdateFishSpawners()
-            {
-                foreach (FishSpawner spawner in fishSpawner)
-                {
-                    spawner.SetMaxHeght(maxPlayerHeight, depthCoeff);
-                }
-            }
-
-            private void ApplyLevelSettings(LevelSettings settings)
-            {
-                foreach (var (spawnerIndex, spawnRate, spawnAmount, hightMin, hightMax) in settings.SpawnActions)
-                {
-                    fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount, hightMin, hightMax);
-                }
-            }
+    private void ApplyLevelSettings(LevelSettings settings)
+    {
+        foreach (var (spawnerIndex, spawnRate, spawnAmount, levelHigh) in settings.SpawnActions)
+        {
+            fishSpawner[spawnerIndex].IncreaseSpawnRate(spawnRate, spawnAmount, levelHigh);
+        }
+    }
 
             private void HideRedObjects(int fishLevel)
             {
@@ -220,6 +198,19 @@ public class GameManager : MonoBehaviour
         backgroundManager.UpdateBackgroundPosition();
         maxPlayerHeight = backgroundManager.GetMaxPlayerHeight();
     }
+    private void BackgroundProgressControl(float _levelScores)
+    {
+        if (maxPlayerHeight <= _levelScores)
+        {
+            depthCoeff = 0f;
+        }
+        else
+        {
+            depthCoeff = 0.0002f;
+        }
+        Debug.Log(" depthCoeff  " + depthCoeff);
+        backgroundManager.SetDepthCoefficient(depthCoeff);
+    }
 }
 
 // Структура для описания действий на уровне
@@ -228,12 +219,14 @@ public class GameManager : MonoBehaviour
 public class LevelSettings
 {
     public int RequiredScore; // Порог очков для перехода на уровень
-    public List<(int spawnerIndex, float spawnRate, int spawnAmount, float hightMin, float hightMax)> SpawnActions; // Действия для увеличения спавна
+    public float LevelScore; // Порог очков для перехода на уровень
+    public List<(int spawnerIndex, float spawnRate, int spawnAmount, int levelHight)> SpawnActions; // Действия для увеличения спавна
 
-    public LevelSettings(int requiredScore, params (int spawnerIndex, float spawnRate, int spawnAmount, float hightMin, float hightMax)[] actions)
+    public LevelSettings(int requiredScore, float levelScore, params (int spawnerIndex, float spawnRate, int spawnAmount, int levelHigh)[] actions)
     {
         RequiredScore = requiredScore;
-        SpawnActions = new List<(int spawnerIndex, float spawnRate, int spawnAmount, float hightMin, float hightMax)>(actions);
+        LevelScore = levelScore;
+        SpawnActions = new List<(int spawnerIndex, float spawnRate, int spawnAmount, int levelHigh)>(actions);
     }
 }
 //Time.timeScale = 0;

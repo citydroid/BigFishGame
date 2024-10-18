@@ -438,11 +438,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: 277a0bf99c1cdb246b7dec6b61b1623c, type: 3}
-  heightMin: 0
-  heightMax: 0.1
   spawnCount: 0
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 0
+  level: 1
 --- !u!1 &382107687
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,11 +489,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: f3d1ec35277ee3c4495b8f587d51db03, type: 3}
-  heightMin: 0
-  heightMax: 1
   spawnCount: 0
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 3
+  level: 1
 --- !u!4 &425307563 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1357674143686492335, guid: e58831a1deae33f4586c1402221e022d, type: 3}
@@ -811,11 +811,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: 4a13ca5f311d7c444b70da7dd08514f3, type: 3}
-  heightMin: 0
-  heightMax: 1
   spawnCount: 0
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 10
+  level: 1
 --- !u!1 &501459936
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,11 +862,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: c1a517367ded56c4f8a984bfcce9f344, type: 3}
-  heightMin: 0
-  heightMax: 1
   spawnCount: 0
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 3
+  level: 1
 --- !u!1 &515556942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,11 +1081,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: af63f47f6a60f5f48bc2b7a58d42460e, type: 3}
-  heightMin: 0
-  heightMax: 1
   spawnCount: 0
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 0
+  level: 1
 --- !u!4 &678703539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1357674143686492335, guid: 14f37ee99f324aa46a6fca24f6096461, type: 3}
@@ -1277,11 +1277,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2088638961300481797, guid: 1843adecd6cf2be4ab41c0196258c268, type: 3}
-  heightMin: 0
-  heightMax: 1
   spawnCount: 0
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 30
+  level: 1
 --- !u!1 &879224425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,11 +1328,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 5
   fishPrefab: {fileID: 2106205615396271955, guid: 383d4f20ff279944fb208dd6b4fe8a77, type: 3}
-  heightMin: 0
-  heightMax: 0.1
   spawnCount: 1
   isWhite: 0
   gameManager: {fileID: 1150426555}
+  maxFish: 3
+  level: 1
 --- !u!1 &882217098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,13 +1517,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897201950}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0547, y: -2.4, z: 0}
-  m_LocalScale: {x: 2.2064118, y: 0.45603123, z: 0.34410346}
+  m_LocalPosition: {x: 0.0547, y: -4.77, z: 0}
+  m_LocalScale: {x: 2.2064118, y: 1, z: 0.34410346}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1021018616}
   - {fileID: 1732747237}
-  - {fileID: 1007903281}
   m_Father: {fileID: 1065267733}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1591,50 +1590,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f9b9d0ad5cc32547ab6dcff50365bd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1007903279
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1007903281}
-  - component: {fileID: 1007903282}
-  m_Layer: 0
-  m_Name: LightsSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1007903281
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007903279}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6112581, y: 4.619268, z: 0.039601397}
-  m_LocalScale: {x: 0.5087487, y: 1.0894498, z: 2.9061027}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 897201951}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1007903282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007903279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4d8d973261a7de49841c6e91a09d70e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  backgroundTransform: {fileID: 897201951}
+  groundSpawner1: {fileID: 1991204717}
+  groundSpawner2: {fileID: 1330154065}
+  cameraTransform: {fileID: 519420032}
 --- !u!4 &1021018616 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1357674143686492335, guid: 8af9e0e7bbb0a9e44b72ea6a056d01de, type: 3}
@@ -1787,12 +1746,9 @@ MonoBehaviour:
   - {fileID: 780628551}
   - {fileID: 290441179}
   - {fileID: 651895684}
-  backgroundTransform: {fileID: 897201951}
-  groundSpawner1: {fileID: 1991204717}
-  groundSpawner2: {fileID: 1330154065}
-  backgroundManager: {fileID: 897201953}
   gameOverPrefab: {fileID: 3901477367628732867, guid: 840b6f2b8e386104ca078d9b14d4b848, type: 3}
   gameMusic: {fileID: 0}
+  backgroundManager: {fileID: 897201953}
 --- !u!4 &1150426556
 Transform:
   m_ObjectHideFlags: 0
@@ -2162,7 +2118,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273661114}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.41, y: 0.0286, z: 0}
+  m_LocalPosition: {x: -0.7, y: -0.6, z: 0}
   m_LocalScale: {x: 0.13373852, y: 0.13373852, z: 0.13373852}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3183,11 +3139,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 2
   fishPrefab: {fileID: 2106205615396271955, guid: 5f6dbb57be94e9c448d69644ee2a96e7, type: 3}
-  heightMin: 0
-  heightMax: 0.5
   spawnCount: 1
   isWhite: 1
   gameManager: {fileID: 1150426555}
+  maxFish: 15
+  level: 1
 --- !u!4 &2037402595
 Transform:
   m_ObjectHideFlags: 0
