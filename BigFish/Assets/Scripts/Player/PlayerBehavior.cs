@@ -2,23 +2,21 @@ using Movers;
 using TMPro;
 using UnityEngine;
 
-public class FlyBehavior : MonoBehaviour
+public class PlayerBehavior : MonoBehaviour
 {
-    private float moveSpeed = 2f;  // Скорость перемещения
-    private float lerpSpeed = 0.03f;  // Коэффициент для плавного движения
+    private readonly float lerpSpeed = 0.03f;  // Коэффициент для плавного движения
 
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject deadPrefab;
-    private float destroyDelay = 1f;  // Время, через которое уничтожается объект
+    [SerializeField] private DeadManager deadManager;
+    [SerializeField] private PlayerAppearance playerAppearance;
+    [SerializeField] private Transform cameraTransform;
 
-    [SerializeField] private Transform cameraTransform;  // Ссылка на камеру
-    private float upperScreenThreshold = 0.75f; // Порог по высоте для сдвига фона (75% экрана)
-    private float lowerScreenThreshold = 0.25f; // Порог по высоте для возврата фона (25% экрана)
-    private float cameraMoveSpeed = 2f;  // Скорость движения фона
+    private readonly float upperScreenThreshold = 0.75f; // Порог по высоте для сдвига фона (75% экрана)
+    private readonly float lowerScreenThreshold = 0.25f; // Порог по высоте для возврата фона (25% экрана)
+    private readonly float cameraMoveSpeed = 2f;  // Скорость движения фона
 
     private Rigidbody2D _rb;
     private Transform _tr;
-    private Animator playerAnimator;
 
     private bool playGame = true;
     private float cameraMinY; // Минимальное значение по оси Y для камеры
@@ -28,20 +26,21 @@ public class FlyBehavior : MonoBehaviour
     private bool isFalling = true; // Флаг, указывающий, падает ли Плеер вниз
 
     private Vector3 velocity = Vector3.zero; // Переменная для плавного движения камеры
-    private float smoothTime = 1f; // Время, за которое камера достигает целевой позиции
-    private float predictionFactor = 10f; // Коэффициент предсказания позиции
+    private readonly float smoothTime = 1f; // Время, за которое камера достигает целевой позиции
+    private readonly float predictionFactor = 10f; // Коэффициент предсказания позиции
 
     private Vector3 lastPosition; // Переменная для отслеживания предыдущей позиции Плеера
-    private bool isMovingRight = true; // Переменная для отслеживания направления движения
-
     private float minX, maxX; // Границы по оси X
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _tr = GetComponent<Transform>();
-        playerAnimator = GetComponent<Animator>();
 
+        if (playerAppearance == null)
+        {
+            playerAppearance = GetComponentInChildren<PlayerAppearance>();
+        }
         // Задаем минимальное положение камеры на старте
         cameraMinY = cameraTransform.position.y;
 
@@ -62,14 +61,13 @@ public class FlyBehavior : MonoBehaviour
             maxPlayerHeight = gameManager.GetMaxPlayerHeight();
 
             // Проверяем положение игрока относительно экрана
-           HandleCameraMovement();  
-            
+            HandleCameraMovement();
+            playerAppearance.MirrorPlayer(lastPosition.x, _tr.position.x);
+            lastPosition = _tr.position;
+            // Управление мышью
+            HandleMouseInput();
 
-                // Управление мышью
-                HandleMouseInput();
-
-               // HandleVerticalBoundary();
- 
+         // HandleVerticalBoundary();
         }
     }
     private void HandleMouseInput()
@@ -163,32 +161,6 @@ public class FlyBehavior : MonoBehaviour
         // Плавно перемещаем камеру в предсказанную позицию
         cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, targetPosition, ref velocity, smoothTime);
     }
-
-    private void HandleAnimationBasedOnDirection()
-    {
-        // Определяем направление движения Плеера по оси X
-        float currentX = _tr.position.x;
-        float lastX = lastPosition.x;
-
-        // Если Плеер движется вправо
-        if (currentX > lastX && !isMovingRight)
-        {
-            isMovingRight = true;
-            // Включаем анимацию №1 (движение вправо)
-            playerAnimator.Play("MoveRightAnimation");
-        }
-        // Если Плеер движется влево
-        else if (currentX < lastX && isMovingRight)
-        {
-            isMovingRight = false;
-            // Включаем анимацию №2 (движение влево)
-            playerAnimator.Play("MoveLeftAnimation");
-        }
-
-        // Обновляем lastPosition для сравнения на следующем кадре
-        lastPosition = _tr.position;
-    }
-
     // Рассчитываем границы экрана по оси X
     private void CalculateScreenBounds()
     {
@@ -202,7 +174,6 @@ public class FlyBehavior : MonoBehaviour
         Vector3 rightEdge = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, mainCamera.nearClipPlane));
         maxX = rightEdge.x - 0.2f;
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         int scoreAdd;
@@ -210,50 +181,21 @@ public class FlyBehavior : MonoBehaviour
 
         if (playGame)
         {
-            // Используем GameManager для проверки в библиотеке рыб
             if (!gameManager.TryGetFishValue(collision.gameObject.tag, out fishValue, out scoreAdd))
-            {
-                return; // Если это не рыба, выходим из метода
-            }
+                return;
 
             if (Score.instance.GetScore() < fishValue)
             {
-                playGame = false; // Выключаем возможность столкновений с другими объектами
-                playerAnimator.Play("PlayerDead");
+                playGame = false;
+                playerAppearance.PlayAnimation("PlayerDead");
             }
             else
             {
-                playerAnimator.Play("PlayerEating");
+                playerAppearance.PlayAnimation("PlayerEating");
                 Score.instance.UpdateScore(scoreAdd);
-
-                // Уничтожаем столкнувшийся объект
                 Destroy(collision.gameObject);
-
-                // Создаем "мертвый" объект (deadPrefab) на месте уничтоженной рыбы
-                Vector3 spawnPosition = collision.gameObject.transform.position;
-                GameObject newObject2 = Instantiate(deadPrefab, spawnPosition, Quaternion.identity);
-
-                // Добавляем на объект (deadPrefab) количество заработанных очков
-                UpdateDeadText(newObject2, scoreAdd);
-
-                // Уничтожаем новый объект через определенное время
-                Destroy(newObject2, destroyDelay);
+                deadManager.SpawnDeadFish(collision.gameObject.transform.position, scoreAdd);
             }
         }
-    }
-
-    private void UpdateDeadText(GameObject deadObject, int scoreAdd)
-    {
-        DeadScore deadScore = deadObject.GetComponent<DeadScore>();
-
-        if (deadScore != null)
-        {
-            deadScore.ScoreValue(scoreAdd);
-        }
-    }
-
-    public void GameOverPlayer() // Включается в конце анимации PlayerDead
-    {
-        gameManager.GameOver();
     }
 }

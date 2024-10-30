@@ -56,21 +56,15 @@ namespace Movers
         }
         private void MirrorFish(float horizontalSpeed)
         {
-            if (horizontalSpeed > 0 && mirrorFish)
-            {
-                Vector3 currentScale = fishTransform.localScale;
-                currentScale.x = -currentScale.x;
-                fishTransform.localScale = new Vector3(currentScale.x, currentScale.y, currentScale.z);
-                mirrorFish = false;
-            }
-            else if (horizontalSpeed < 0 && !mirrorFish)
-            {
-                Vector3 currentScale = fishTransform.localScale;
-                currentScale.x = -currentScale.x;
-                fishTransform.localScale = new Vector3(currentScale.x, currentScale.y, currentScale.z);
-                mirrorFish = true;
-            }
+            bool shouldMirror = (horizontalSpeed > 0 && mirrorFish) || (horizontalSpeed < 0 && !mirrorFish);
 
+            if (shouldMirror)
+            {
+                Vector3 currentScale = fishTransform.localScale;
+                currentScale.x = -currentScale.x;
+                fishTransform.localScale = currentScale;
+                mirrorFish = !mirrorFish;
+            }
         }
 
         // ѕубличный метод дл€ задани€ максимальной высоты
