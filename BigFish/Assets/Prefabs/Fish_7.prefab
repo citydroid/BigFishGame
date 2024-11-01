@@ -485,6 +485,8 @@ GameObject:
   m_Component:
   - component: {fileID: 581993924114252883}
   - component: {fileID: 5056846751448860085}
+  - component: {fileID: 3842962583835323610}
+  - component: {fileID: 13427245294935266}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -560,6 +562,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3842962583835323610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587982090644902927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &13427245294935266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587982090644902927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaa2e9f5aeb98c4ab8c5e6891e8206f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishValueText: {fileID: 8482270677495720505}
 --- !u!1 &7819791179896083780
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,7 +653,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1000
+  m_text: 2000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
@@ -706,6 +733,7 @@ GameObject:
   - component: {fileID: 6743608591405778497}
   - component: {fileID: 6973467652363421897}
   - component: {fileID: 5521884524367342414}
+  - component: {fileID: 5434503832777725434}
   m_Layer: 0
   m_Name: Fish
   m_TagString: Untagged
@@ -800,3 +828,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5434503832777725434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9025177537747446282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

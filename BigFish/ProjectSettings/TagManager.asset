@@ -37,6 +37,7 @@ TagManager:
   - Fish_28
   - Fish_29
   - Fish_30
+  - FishValue
   layers:
   - Default
   - TransparentFX

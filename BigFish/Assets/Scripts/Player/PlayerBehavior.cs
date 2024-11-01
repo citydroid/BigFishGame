@@ -13,7 +13,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private readonly float upperScreenThreshold = 0.75f; // Порог по высоте для сдвига фона (75% экрана)
     private readonly float lowerScreenThreshold = 0.25f; // Порог по высоте для возврата фона (25% экрана)
-    private readonly float cameraMoveSpeed = 2f;  // Скорость движения фона
+    private readonly float cameraMoveSpeed = 2f;  // Скорость движения камеры
 
     private Rigidbody2D _rb;
     private Transform _tr;

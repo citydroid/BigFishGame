@@ -1,5 +1,6 @@
 using Movers;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class FishSpawner : MonoBehaviour
@@ -9,7 +10,6 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private int spawnCount = 0;
     [SerializeField] private bool isWhite = false;
     [SerializeField] private GameManager gameManager;
-
     [SerializeField] private int maxFish;
 
     [SerializeField] private int level = 1; // Уровень спауна
@@ -17,11 +17,10 @@ public class FishSpawner : MonoBehaviour
 
     private float _timer = 0f;
     private GameObject _baseObject;
-    private float heightStoper = 1;
 
+    private int fishValue;
     private FishMover fishMover;
     private float maxHeight = 1f;
-    private float depthCoeff = 0.0002f;
 
         // Список для отслеживания активных объектов рыб
     private List<GameObject> activeFishObjects = new List<GameObject>();
@@ -49,44 +48,57 @@ public class FishSpawner : MonoBehaviour
 
     private void SpawnFish()
     {
-        //heightStoper = gameManager.GetMaxPlayerHeight() + 0.9f;
         var (heightMin, heightMax) = spawnLevelManager.GetHeightRange(level);
 
         for (int i = 0; i < spawnCount; i++)
         {
             Vector3 position = transform.position + new Vector3(0, Random.Range(heightMin, heightMax), 0);
-Debug.Log("heightMin " + heightMin + " heightMax " + heightMax);
+//Debug.Log("heightMin " + heightMin + " heightMax " + heightMax);
             GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);
-                newFish.transform.SetParent(_baseObject.transform, false);
-
-                newFish.GetComponent<FishMover>().SetDepth(maxHeight, depthCoeff);
+            newFish.transform.SetParent(_baseObject.transform, false);
 
                 //Ищем Fish и задаём случайный размер в процентах от существующего
-                Transform scaleTransform = newFish.transform.Find("Fish");
-
-                if (scaleTransform != null)
-                {
+            Transform scaleTransform = newFish.transform.Find("Fish");
+            if (scaleTransform != null)
+            {
                     // Получаем текущий масштаб объекта Fish
                     Vector3 currentScale = scaleTransform.localScale;
                     float randCoef = Random.Range(0.7f, 1f);// Масштаб X от 60% до 100%
                     float randomScaleX = currentScale.x * randCoef;
                     float randomScaleY = currentScale.y * randCoef;
-
                     scaleTransform.localScale = new Vector3(randomScaleX, randomScaleY, currentScale.z);
-                }
+            }
 
+            Transform redTransform = newFish.transform.Find("Red");
+            if (redTransform != null)
+            {
                 if (isWhite)
                 {
-                    Transform textTransform = newFish.transform.Find("Red");
-                    GameObject valueObject = textTransform.gameObject;
-                    if (valueObject != null)
-                    {
-                        valueObject.SetActive(false);
-                    }
+                    redTransform.gameObject.SetActive(false);
                 }
-                // Добавляем новую рыбу в список активных объектов
-                activeFishObjects.Add(newFish);
+                else
+                {
+                    FishValueSetter fishValueSetter = redTransform.GetComponent<FishValueSetter>();
+                    if (fishValueSetter != null)
+                        fishValueSetter.SetFishValue(fishValue);
+                }
+            }
+            // Добавляем новую рыбу в список активных объектов
+            activeFishObjects.Add(newFish);
         }
+    }
+    public void HideRedObjects()
+    {
+        foreach (GameObject fish in activeFishObjects)
+        {
+            Transform redTransform = fish.transform.Find("Red");
+            if (redTransform != null)
+                redTransform.gameObject.SetActive(false);
+        }
+    }
+    public void SetFishValue(int _fishValue)
+    {
+        fishValue = _fishValue;
     }
     private void RemoveDestroyedFish()
     {

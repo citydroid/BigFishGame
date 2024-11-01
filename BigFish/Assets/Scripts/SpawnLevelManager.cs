@@ -17,7 +17,7 @@ public class SpawnLevelManager
         switch (level)
         {
             case 1:
-                return (0f, 0.0001f);
+                return (0f, 0f);
             case 2:
                 return (0f, Mathf.Min(2f, maxHeight));
             case 3:

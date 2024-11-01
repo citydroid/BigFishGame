@@ -293,6 +293,7 @@ GameObject:
   - component: {fileID: 790137793494778048}
   - component: {fileID: 6791432211900198087}
   - component: {fileID: 693896913258409572}
+  - component: {fileID: 5166716911489877227}
   m_Layer: 0
   m_Name: Fish
   m_TagString: Untagged
@@ -387,6 +388,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5166716911489877227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3719034914473083942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4357861639317470861
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +603,8 @@ GameObject:
   m_Component:
   - component: {fileID: 581993924114252883}
   - component: {fileID: 5056846751448860085}
+  - component: {fileID: 3173673256572132848}
+  - component: {fileID: 2899004718459183467}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -665,6 +680,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3173673256572132848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587982090644902927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2899004718459183467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587982090644902927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaa2e9f5aeb98c4ab8c5e6891e8206f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishValueText: {fileID: 8482270677495720505}
 --- !u!1 &7819791179896083780
 GameObject:
   m_ObjectHideFlags: 0

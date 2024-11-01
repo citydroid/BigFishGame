@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class BackgroundManager : MonoBehaviour
 {
     [SerializeField] private Transform backgroundTransform;
@@ -15,22 +15,6 @@ public class BackgroundManager : MonoBehaviour
     public void Initialize(float initialDepthCoeff)
     {
         depthCoeff = initialDepthCoeff;
-    }
-
-    public void UpdateBackgroundPosition()
-    {
-        Vector3 newPosition = backgroundTransform.position;
-        newPosition.y += depthCoeff;
-        backgroundTransform.position = newPosition;
-
-        maxPlayerHeight += depthCoeff;
-        //Debug.Log("newPosition.y " + newPosition.y + " maxPlayerHeight " + maxPlayerHeight);
-        UpdateTerraColor();
-    }
-        private void UpdateTerraColor() 
-    {
-        groundSpawner1.ChangeGrayLevel(depthCoeff / 5);
-        groundSpawner2.ChangeGrayLevel(depthCoeff / 5);
     }
 
     private float SetSpeedDependsCamera()
@@ -61,6 +45,34 @@ public class BackgroundManager : MonoBehaviour
         return normalizedSpeed;
     }
     */
+
+    public void MoveBackground(float distance)
+    {
+
+        StartCoroutine(MoveBackgroundRoutine(distance));
+    }
+
+    private IEnumerator MoveBackgroundRoutine(float distance)
+    {
+        float targetY = backgroundTransform.position.y + distance;
+
+        while (Mathf.Abs(backgroundTransform.position.y - targetY) > 0.01f)
+        {
+            Vector3 newPosition = backgroundTransform.position;
+            newPosition.y += depthCoeff * Time.deltaTime; // Используем инкремент для движения к цели
+            backgroundTransform.position = newPosition;
+
+            maxPlayerHeight += depthCoeff * Time.deltaTime; // Обновляем высоту игрока, если необходимо
+            UpdateTerraColor();
+ Debug.Log(" maxPlayerHeight  " + maxPlayerHeight);
+            yield return null;
+        }
+    }
+    private void UpdateTerraColor()
+    {
+        groundSpawner1.ChangeGrayLevel(depthCoeff / 5);
+        groundSpawner2.ChangeGrayLevel(depthCoeff / 5);
+    }
     public float GetMaxPlayerHeight()
     {
         return maxPlayerHeight;

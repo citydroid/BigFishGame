@@ -1,9 +1,22 @@
+using TMPro;
 using UnityEngine;
 
 namespace Movers
 {
+    public interface IMovable
+    {
+        void Move();
+    }
+
+    public interface IDirectionChanger
+    {
+        void ChangeDirection();
+    }
+
     public class FishMover : MonoBehaviour
     {
+        private readonly bool playGame = true;
+
         [SerializeField] private float minSpeed = 0.5f;
         [SerializeField] private float maxSpeed = 1.5f;
         protected float _horizontalSpeed;
@@ -11,18 +24,23 @@ namespace Movers
         [SerializeField] private float minVertSpeed = 0f;
         [SerializeField] private float maxVertSpeed = 0f;
         protected float _verticalSpeed;
+
+        [SerializeField] private Transform fishTransform;
         protected bool mirrorFish = false;
 
+        protected GameManager gameManager;
         protected readonly float targetLeftX = -5f;
         protected readonly float targetRightX = 5f;
         protected float _maxVertical;
         protected float _minVertical = -1f;
-        protected float depthCoeff = 0.0002f;
 
-        [SerializeField] private Transform fishTransform;
+        private void Awake()
+        {
+            GameObject gameManagerObject = GameObject.Find("GameManager"); 
 
-        private bool playGame = true;
-
+            if (gameManagerObject != null)
+                gameManager = gameManagerObject.GetComponent<GameManager>();
+        }
         void Start()
         {
             _horizontalSpeed = Random.Range(minSpeed, maxSpeed);
@@ -33,23 +51,20 @@ namespace Movers
         {
             if (playGame)
             {
-                _maxVertical += depthCoeff;
-
+                _maxVertical = gameManager.GetMaxPlayerHeight();
+// Debug.Log("_maxVertical " + _maxVertical);
                 Mover();
 
                 MirrorFish(_horizontalSpeed);
 
-                // Обновляем позицию рыбы с учетом горизонтальной и вертикальной скорости
                 transform.position += new Vector3(-_horizontalSpeed, _verticalSpeed, 0) * Time.deltaTime;
 
-                // Уничтожаем объект, если он выходит за пределы экрана
                 if (transform.position.x <= targetLeftX || transform.position.x >= targetRightX)
                 {
                     Destroy(gameObject);
                 }
             }
         }
-
         protected virtual void Mover()
         {
             _verticalSpeed = 0;
@@ -67,16 +82,8 @@ namespace Movers
             }
         }
 
-        // Публичный метод для задания максимальной высоты
-        public void SetMaxVertical(float maxValue)
-        {
-            _maxVertical = maxValue - 0.2f;  // С небольшим отступом от заданной высоты
-        }
-        public void SetDepth(float maxVertical, float depthValue)
-        {
-            _maxVertical = maxVertical - 0.1f;
-            depthCoeff = depthValue;  // С небольшим отступом от заданной высоты
-        }
+
+
         // Публичный метод для изменения вертикальной скорости
         public void SetVerticalSpeed(float verticalSpeed)
         {

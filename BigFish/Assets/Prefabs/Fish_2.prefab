@@ -486,6 +486,7 @@ GameObject:
   - component: {fileID: 3709386981725514535}
   - component: {fileID: 209920808026969609}
   - component: {fileID: 5971836705444523315}
+  - component: {fileID: 7634548245970243975}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -573,6 +574,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b6abc53f14eb74dbfd882b3ed698f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7634548245970243975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816740906793170076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaa2e9f5aeb98c4ab8c5e6891e8206f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishValueText: {fileID: 4789747934580011919}
 --- !u!1 &4938078880910621861
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,7 +653,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 20
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
