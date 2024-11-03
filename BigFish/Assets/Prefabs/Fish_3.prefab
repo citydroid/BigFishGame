@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 1473965693043333861}
   - component: {fileID: 6825001115559265657}
   - component: {fileID: 382303633878508531}
+  - component: {fileID: 1417483880757071034}
   m_Layer: 0
   m_Name: Fish_3
   m_TagString: Fish_3
@@ -166,7 +167,6 @@ MonoBehaviour:
   minVertSpeed: 0.1
   maxVertSpeed: 0.3
   fishTransform: {fileID: 5514936042205214573}
-  fishScoreText: {fileID: 0}
 --- !u!61 &382303633878508531
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,6 +193,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.13596734, y: 0.08030988}
   m_EdgeRadius: 0
+--- !u!50 &1417483880757071034
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088638961300481797}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0006093517
+  m_LinearDrag: 0
+  m_AngularDrag: 0.01
+  m_GravityScale: 0.5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2664651906005663734
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,6 +38,8 @@ TagManager:
   - Fish_29
   - Fish_30
   - FishValue
+  - NetCollider
+  - NetColider
   layers:
   - Default
   - TransparentFX

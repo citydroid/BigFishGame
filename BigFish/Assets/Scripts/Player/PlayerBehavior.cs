@@ -180,7 +180,13 @@ public class PlayerBehavior : MonoBehaviour
         int fishValue;
 
         if (playGame)
-        {
+        {  
+            if (collision.CompareTag("NetCollider"))
+            {
+                Debug.Log("Collision with NetCollider detected.");
+
+            }
+
             if (!gameManager.TryGetFishValue(collision.gameObject.tag, out fishValue, out scoreAdd))
                 return;
 

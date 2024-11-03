@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     private int currentLevelIndex = 0;
     private float maxPlayerHeight; 
-    private float depthCoeff = 0.02f;
+    private float depthCoeff = 0.1f;
 
     private readonly Dictionary<string, (int fishValue, int scoreAdd)> fishValues = new Dictionary<string, (int fishValue, int scoreAdd)>
     {
@@ -43,12 +43,12 @@ public class GameManager : MonoBehaviour
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
         // Настройки для уровня 0 (# рыбы, пауза между спаунами, количество рыбы за спаун, мин.высота, макс.высота)
-        new LevelSettings(0, 0.1f, new[] { (1, 1f, 1, 2), (2, 3f, 1, 1) }),
-        new LevelSettings(3, 0.1f, new[] { (1, 0.5f, 1, 2)}),
-        new LevelSettings(10, 0.1f, new[] { (1, 1f, 1, 3), (3, 5f, 2, 3) }),
-        new LevelSettings(18, -1f, new[] { (2, 10f, 1, 1), (3, 0.5f, 1, 3), (4, 2f, 1, 3) }),
-        new LevelSettings(50, -1f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 5f, 1,3), (5, 1f, 2, 5) }),
-        new LevelSettings(120, -1f, new[] { (1, 0.5f, 3, 5), (2, 1f, 1, 1), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 0f, 0, 0) }),
+        new LevelSettings(0, 9f, new[] { (1, 1f, 1, 2), (2, 3f, 1, 1) }),
+        new LevelSettings(3, 0f, new[] { (1, 0.5f, 1, 2)}),
+        new LevelSettings(10, 0f, new[] { (1, 1f, 1, 3), (3, 5f, 2, 3) }),
+        new LevelSettings(18, 0f, new[] { (2, 10f, 1, 1), (3, 0.5f, 1, 3), (4, 2f, 1, 3) }),
+        new LevelSettings(50, 0f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 5f, 1,3), (5, 1f, 2, 5) }),
+        new LevelSettings(120, 0f, new[] { (1, 0.5f, 3, 5), (2, 1f, 1, 1), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 0f, 0, 0) }),
         new LevelSettings(200, 1f, new[] { (1, 5f, 10, 6), (2, 0f, 0, 1), (3, 1f, 1,4), (4, 1f, 1, 4), (5, 1f, 1, 4), (6, 0f, 0, 0), (7, 1f, 1, 1) }),
         new LevelSettings(500, 1f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
         new LevelSettings(1000, 1f, new[] { (2, 2f, 1, 1), (3, 1f, 1, 4), (4, 1f, 1, 5), (8, 3f, 3, 4) })
@@ -56,24 +56,34 @@ public class GameManager : MonoBehaviour
     };
     private void Awake()
     {  
-        fishValuesList = new List<KeyValuePair<string, (int fishValue, int scoreAdd)>>(fishValues);
+        InitializeFishValues();
+        InitializeBackground();
 
         Time.timeScale = 1.0f;
-        transform.parent = null;
         SceneManager.sceneLoaded += OnSceneLoaded;
 
+        InitializeFishSpawnerValues();
+    }
+    private void InitializeFishValues()
+    {
+        fishValuesList = new List<KeyValuePair<string, (int fishValue, int scoreAdd)>>(fishValues);
+    }
+    private void InitializeBackground()
+    {
         if (SceneManager.GetActiveScene().buildIndex == 1)
-            backgroundManager.Initialize(depthCoeff);
-
-        for (int i = 0; i < fishSpawner.Length && i < fishValuesList.Count; i++)
         {
-            if (i > 0)
-                fishSpawner[i].SetFishValue(fishValuesList[i-1].Value.fishValue);
+            backgroundManager.Initialize(depthCoeff);
+        }
+    }
+    private void InitializeFishSpawnerValues()
+    {
+        for (int i = 1; i < fishSpawner.Length && i < fishValuesList.Count; i++)
+        {
+            fishSpawner[i].SetFishValue(fishValuesList[i - 1].Value.fishValue);
         }
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Сбрасываем флаг при загрузке новой сцены
         _isSceneChanging = false;
     }
     private void Update()
@@ -84,15 +94,15 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == 1 && !gameOver)
         {
             int currentScore = Score.instance.GetScore();
-            LevelProgress(currentScore);
+            LevelProgressUpdate(currentScore);
 
             if (currentScore >= fishValuesList[currentFishLevel].Value.fishValue)
-                FishNextLevel();
+                FishLevelUpdate();
 
             maxPlayerHeight = backgroundManager.GetMaxPlayerHeight();
         }
     }
-    private void LevelProgress(int currentScore)
+    private void LevelProgressUpdate(int currentScore)
     {
         if (currentLevel >= levelSettings.Count)
             return;
@@ -100,14 +110,14 @@ public class GameManager : MonoBehaviour
         var settings = levelSettings[currentLevel];
         if (currentScore >= settings.RequiredScore && !hasIncreasedSpawn[currentLevel])
         {
-            CheckLevelProgress(settings.BackgroundMoveDistance);
+            BackgroundMove(settings.BackgroundMoveDistance);
             ApplyLevelSettings(settings);
             hasIncreasedSpawn[currentLevel] = true;
             currentLevel++;
         }
     }
 
-     private void FishNextLevel()
+     private void FishLevelUpdate()
      {
         currentFishLevel++;
         Progress.Instance.PlayerInfo.Level = currentFishLevel;
@@ -167,13 +177,10 @@ public class GameManager : MonoBehaviour
         scoreAdd = 0;
         return false;
     }
-    public float GetMaxPlayerHeight()
+    public float GetMaxPlayerHeight() => maxPlayerHeight;
+    private void BackgroundMove(float distance)
     {
-        return maxPlayerHeight;
-    }
-    private void CheckLevelProgress(float distance)
-    {
-        backgroundManager.MoveBackground(distance); // Задаем смещение фона
+        backgroundManager.MoveBackground(distance); 
     }
 }
 

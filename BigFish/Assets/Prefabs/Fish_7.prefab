@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1473965693043333861}
   - component: {fileID: 5435014511433487093}
   - component: {fileID: 382303633878508531}
+  - component: {fileID: 6852539804681964193}
   m_Layer: 0
   m_Name: Fish_7
   m_TagString: Fish_7
@@ -80,6 +81,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9789239, y: 0.14353351}
   m_EdgeRadius: 0
+--- !u!50 &6852539804681964193
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088638961300481797}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0006093517
+  m_LinearDrag: 0
+  m_AngularDrag: 0.01
+  m_GravityScale: 0.5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &3026201579578041547
 GameObject:
   m_ObjectHideFlags: 0

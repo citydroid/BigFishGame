@@ -63,8 +63,8 @@ public class BackgroundManager : MonoBehaviour
             backgroundTransform.position = newPosition;
 
             maxPlayerHeight += depthCoeff * Time.deltaTime; // Обновляем высоту игрока, если необходимо
-            UpdateTerraColor();
- Debug.Log(" maxPlayerHeight  " + maxPlayerHeight);
+           // UpdateTerraColor();
+
             yield return null;
         }
     }

@@ -83,9 +83,18 @@ namespace Movers
         }
 
 
-
-        // ѕубличный метод дл€ изменени€ вертикальной скорости
-        public void SetVerticalSpeed(float verticalSpeed)
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("NetCollider"))
+            {
+                Debug.Log("Collision with NetCollider detected.");
+                // ќстанавливаем движение рыбы
+                _horizontalSpeed = 0;
+                _verticalSpeed = 0;
+            }
+        }
+            // ѕубличный метод дл€ изменени€ вертикальной скорости
+            public void SetVerticalSpeed(float verticalSpeed)
         {
             _verticalSpeed = verticalSpeed;
         }
