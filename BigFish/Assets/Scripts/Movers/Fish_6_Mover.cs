@@ -1,18 +1,22 @@
+using Movers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fish_6_Mover : MonoBehaviour
+public class Fish_6_Mover : FishMover
 {
-    // Start is called before the first frame update
-    void Start()
+    private float changeDirectionTime = 20f;
+    private float currentTime = 0f;
+    protected override void Mover()
     {
-        
-    }
+        currentTime += Time.deltaTime;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // ѕериодическа€ смена направлени€ движени€
+        if (currentTime >= changeDirectionTime)
+        {
+            _horizontalSpeed = -_horizontalSpeed;
+            _verticalSpeed = -_verticalSpeed;
+            currentTime = 0f;
+        }
     }
 }

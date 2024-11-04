@@ -82,13 +82,11 @@ namespace Movers
             }
         }
 
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("NetCollider"))
             {
                 Debug.Log("Collision with NetCollider detected.");
-                // Останавливаем движение рыбы
                 _horizontalSpeed = 0;
                 _verticalSpeed = 0;
             }

@@ -239,12 +239,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1473965693043333861}
-  - component: {fileID: 4872771361639121932}
+  - component: {fileID: 5482147355725749156}
   - component: {fileID: 382303633878508531}
   - component: {fileID: 1644339141592634915}
   m_Layer: 0
   m_Name: Fish_5
-  m_TagString: Fish_4
+  m_TagString: Fish_5
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -268,7 +268,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4872771361639121932
+--- !u!114 &5482147355725749156
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,13 +277,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2088638961300481797}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7b2fac6399da6844aea40b607a54757, type: 3}
+  m_Script: {fileID: 11500000, guid: aa85d3bb73bcb254f886472e07dcd948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minSpeed: 0.5
   maxSpeed: 1.5
   minVertSpeed: 0
-  maxVertSpeed: 0.1
+  maxVertSpeed: 0
   fishTransform: {fileID: 8700711311848640959}
 --- !u!61 &382303633878508531
 BoxCollider2D:

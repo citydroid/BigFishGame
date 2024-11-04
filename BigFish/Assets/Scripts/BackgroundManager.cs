@@ -9,7 +9,7 @@ public class BackgroundManager : MonoBehaviour
     private TerraWaveSpawner colorGround2;
     private float depthCoeff;
 
-    [SerializeField] private Transform cameraTransform;  // —сылка на камеру
+    [SerializeField] private Transform cameraTransform;
     private float maxPlayerHeight = -0.8f;
 
     public void Initialize(float initialDepthCoeff)

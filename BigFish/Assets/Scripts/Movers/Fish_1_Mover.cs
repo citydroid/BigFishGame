@@ -7,12 +7,12 @@ namespace Movers
         protected override void Mover()
         {
             base.Mover();
-            _horizontalSpeed = _horizontalSpeed - 0.001f;
+            _horizontalSpeed = _horizontalSpeed - 0.0005f;
         }
         public void Move()
         {
-            base.Mover();
-            _horizontalSpeed = _horizontalSpeed - 0.002f;
+         //   base.Mover();
+         //   _horizontalSpeed = _horizontalSpeed - 0.002f;
         }
     }
 }
