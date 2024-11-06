@@ -6,7 +6,7 @@ namespace Movers
     {
         protected override void Mover()
         {
-            _horizontalSpeed = _horizontalSpeed + 0.002f;
+            _horizontalSpeed = _horizontalSpeed + 0.001f;
         }
     }
 }

@@ -42,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -127,7 +127,238 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_0
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 586
+        width: 150
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a63e380e18f78f4fa0fa9d4bd2b4713
+      internalID: 614653734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_1
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 586
+        width: 150
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 075ce58929aaa6240afbd389255d3a6e
+      internalID: -1372207616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_2
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 586
+        width: 150
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7406a89aea6bf7546a09994ca6d029d9
+      internalID: 475254465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_3
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 586
+        width: 150
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1db04217f8e69df468375f8e5b4dcb02
+      internalID: 2079588681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_4
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 288
+        width: 160
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5866ea99a720e943aa22ee50aea9e75
+      internalID: 926369753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_5
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 288
+        width: 160
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb0249c0450c5b3499ce622df7568e6b
+      internalID: -993968622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_6
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 288
+        width: 160
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba45ce5522c24ef40acaba95ba3dd68e
+      internalID: 1600212702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_7
+      rect:
+        serializedVersion: 2
+        x: 606
+        y: 288
+        width: 160
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fbd9509a41cec54d86a3d4d5de410c1
+      internalID: -990914998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_8
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 225
+        width: 39
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7d3f2f71f450b44dab283b99f24fa2b
+      internalID: 398102552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_9
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 242
+        width: 78
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04de8bf5da26b9c428173612bfa00083
+      internalID: 1495982068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile-Big-Fish-2 1_10
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 241
+        width: 61
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 925e0fc5e6f6c1e4dbe05c8708bfbab5
+      internalID: 470952986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -138,7 +369,18 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Mobile-Big-Fish-2 1_0: 614653734
+      Mobile-Big-Fish-2 1_1: -1372207616
+      Mobile-Big-Fish-2 1_5: -993968622
+      Mobile-Big-Fish-2 1_10: 470952986
+      Mobile-Big-Fish-2 1_2: 475254465
+      Mobile-Big-Fish-2 1_9: 1495982068
+      Mobile-Big-Fish-2 1_7: -990914998
+      Mobile-Big-Fish-2 1_3: 2079588681
+      Mobile-Big-Fish-2 1_6: 1600212702
+      Mobile-Big-Fish-2 1_8: 398102552
+      Mobile-Big-Fish-2 1_4: 926369753
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

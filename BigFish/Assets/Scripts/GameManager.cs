@@ -27,13 +27,15 @@ public class GameManager : MonoBehaviour
     {
         { "Fish_1", (2, 1) },
         { "Fish_2", (20, 3) },
-        { "Fish_3", (40, 5) },
-        { "Fish_4", (100, 8) },
+        { "Fish_3", (50, 5) },
+        { "Fish_4", (90, 8) },
         { "Fish_5", (200, 15) },
         { "Fish_6", (400, 25) },
         { "Fish_7", (1000, 30) },
-        { "Fish_8", (2000, 35) },
-        { "Fish_9", (5050, 40) }
+        { "Fish_8", (1600, 35) },
+        { "Fish_9", (2300, 40) },
+        { "Fish_10", (3100, 45) },
+        { "Fish_11", (4100, 50) }
     };
     private List<KeyValuePair<string, (int fishValue, int scoreAdd)>> fishValuesList;
 
@@ -41,17 +43,19 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 0;
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
-        // 9f
+        // 9f 
         new LevelSettings(0, 0f, new[] { (1, 0.5f, 1, 2), (2, 1.5f, 1, 1) }),
-        new LevelSettings(3, 0.3f, new[] { (1, 0.1f, 1, 2)}),
-        new LevelSettings(10, 0.2f, new[] { (1, 1f, 1, 3), (3, 5f, 2, 2) }),
-        new LevelSettings(20, 0.3f, new[] { (2, 10f, 1, 1), (3, 0.5f, 1, 3), (4, 2f, 1, 3) }),
-        new LevelSettings(40, 0.3f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 5f, 1,3), (5, 1f, 1, 5) }),
-        new LevelSettings(100, 0.3f, new[] { (1, 0.5f, 3, 5), (2, 1f, 1, 1), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 0f, 0, 0), (6, 0.5f, 1, 5) }),
-        new LevelSettings(200, 0f, new[] { (1, 5f, 10, 6), (2, 0f, 0, 1), (3, 1f, 1,4), (4, 1f, 1, 4), (5, 1f, 1, 4), (6, 0f, 0, 0), (7, 1f, 1, 1) }),
-        new LevelSettings(500, 0f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
-        new LevelSettings(1000, 0f, new[] { (2, 2f, 1, 1), (3, 1f, 1, 4), (4, 1f, 1, 5), (8, 3f, 3, 4) })
-
+        new LevelSettings(10, 0.3f, new[] { (1, 1f, 1, 5), (3, 5f, 2, 2) }),
+        new LevelSettings(20, 0.3f, new[] { (2, 10f, 1, 1), (3, 0.5f, 1, 3)}),
+        new LevelSettings(40, 0.3f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 5f, 1,3), (5, 4f, 1, 5) }),
+        new LevelSettings(50, 0.3f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 0f, 0,3), (6, 1f, 1, 5) }),
+        new LevelSettings(90, 0.3f, new[] { (1, 0.5f, 3, 5), (2, 0f, 0, 0), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 10f, 1, 4), (7, 0.5f, 1, 1) }),
+        new LevelSettings(200, 0.3f, new[] { (1, 5f, 10, 6), (3, 1f, 1,4), (4, 1f, 1, 4), (6, 0f, 0, 0), (8, 1f, 1, 1) }),
+        new LevelSettings(400, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (9, 3f, 3, 5) }),
+        new LevelSettings(1000, 0.3f, new[] { (2, 2f, 1, 1), (3, 1f, 1, 4), (4, 1f, 1, 5), (10, 3f, 3, 4) }),
+        new LevelSettings(1600, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
+        new LevelSettings(2300, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
+        new LevelSettings(3100, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) })
     };
     private void Awake()
     {  

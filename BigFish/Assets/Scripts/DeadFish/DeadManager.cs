@@ -3,7 +3,7 @@ using UnityEngine;
 public class DeadManager : MonoBehaviour
 {
     [SerializeField] private GameObject deadPrefab;
-    [SerializeField] private float destroyDelay = 2.0f;
+    [SerializeField] private float destroyDelay = 1.5f;
 
     public void SpawnDeadFish(Vector3 spawnPosition, int scoreAdd)
     {

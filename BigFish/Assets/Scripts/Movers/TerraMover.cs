@@ -5,7 +5,7 @@ namespace Movers
     public class TerraMover : MonoBehaviour
     {
         [SerializeField] private float _speed;
-        [SerializeField] private float targetX = -5f;
+        [SerializeField] private float targetX = -5.3f;
         [SerializeField] private SpriteRenderer spriteRenderer;
         void Update()
         {

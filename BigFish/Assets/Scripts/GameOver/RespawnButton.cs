@@ -1,14 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RespawnButton : MonoBehaviour
 {
+    protected GameManager gameManager;
+    private void Awake()
+    {
+        GameObject gameManagerObject = GameObject.Find("GameManager");
 
+        if (gameManagerObject != null)
+            gameManager = gameManagerObject.GetComponent<GameManager>();
+    }
     void OnMouseDown()
     {
+        gameManager.ResumeGame();
+
         //Вызов рекламы за вознаграждение Яндекс 
         Yandex.Instance.RevardAdv();
         //После рекламы вызывается Yandex.Instance.AfterAdvAction();

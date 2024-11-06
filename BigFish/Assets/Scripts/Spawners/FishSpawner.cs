@@ -57,7 +57,6 @@ public class FishSpawner : MonoBehaviour
             GameObject newFish = Instantiate(fishPrefab, position, Quaternion.identity);
             newFish.transform.SetParent(_baseObject.transform, false);
 
-                //»щем Fish и задаЄм случайный размер в процентах от существующего
             Transform scaleTransform = newFish.transform.Find("Fish");
             if (scaleTransform != null)
             {

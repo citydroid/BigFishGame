@@ -126,6 +126,11 @@ public class PlayerBehavior : MonoBehaviour
                 playerAppearance.PlayAnimation("PlayerEating");
                 Score.instance.UpdateScore(scoreAdd);
                 Destroy(collision.gameObject);
+            /*    FishMover fishMover = collision.gameObject.GetComponent<FishMover>();
+                if (fishMover != null)
+                {
+                    fishMover.IncreaseHorizontalSpeed(0.3f); 
+                }*/
                 deadManager.SpawnDeadFish(collision.gameObject.transform.position, scoreAdd);
             }
         }
