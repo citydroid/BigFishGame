@@ -5,14 +5,13 @@ public class TerraWaveSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject baseObject;
     [SerializeField] private float MaxTime = 1.0f;
-    [SerializeField] private GameObject _terra;
-    
+    [SerializeField] private GameObject[] terraPrefabs;
+    [SerializeField] private int currentLevel = 0;
+
     private float darkerColor = 1f;  // Новый цвет для спрайта
 
     private float height = 0;
     private float _timer = 0;
- 
-    //private int terra = 0;
 
     void Start()
     {
@@ -31,11 +30,14 @@ public class TerraWaveSpawner : MonoBehaviour
     }
     private void Spawner()
     {
+        if (terraPrefabs == null || terraPrefabs.Length == 0)
+            return;
+
         Vector3 position = transform.position + new Vector3(0, Random.Range(-height, height), 0);
 
-        GameObject _newFish = Instantiate(_terra, position, Quaternion.identity);
-        _newFish.transform.SetParent(baseObject.transform, false);
-        ChangeObjectColor(_newFish, darkerColor);
+        GameObject _newTerra = Instantiate(terraPrefabs[currentLevel], position, Quaternion.identity);
+        _newTerra.transform.SetParent(baseObject.transform, false);
+        ChangeObjectColor(_newTerra, darkerColor);
     }
     private void ChangeObjectColor(GameObject existingObject, float grayLevel)
     {
@@ -48,5 +50,12 @@ public class TerraWaveSpawner : MonoBehaviour
     public void ChangeGrayLevel(float depthCoeff)
     {
         darkerColor -= depthCoeff;
+    }
+    public void SetLevel(int level)
+    {
+        Debug.Log(level);
+
+        currentLevel = level;
+        Spawner();
     }
 }

@@ -27,7 +27,7 @@ public class SpawnLevelManager
             case 5:
                 return (0f, maxHeight);
             case 6:
-                return (Mathf.Max(0f, maxHeight - 0.1f), maxHeight);
+                return (Mathf.Max(0f, maxHeight - 0.01f), maxHeight);
             default:
                 return (0f, 0.1f); // Уровень по умолчанию
         }

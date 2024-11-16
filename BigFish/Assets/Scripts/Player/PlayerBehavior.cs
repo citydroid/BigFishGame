@@ -8,6 +8,10 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private PlayerAppearance playerAppearance;
     [SerializeField] private CameraController cameraController;
 
+    [SerializeField] private GameObject bubbleSpawn; 
+    private BubbleSpawner bubbleSpawner;
+    private float movementThreshold = 0.01f;
+
     private Transform _tr;
     private bool playGame = true;
     private float maxPlayerHeight;
@@ -29,7 +33,10 @@ public class PlayerBehavior : MonoBehaviour
         if (cameraController == null)
             cameraController = FindObjectOfType<CameraController>();
 
-        maxPlayerHeight = gameManager.GetMaxPlayerHeight();
+        if (bubbleSpawn != null)
+            bubbleSpawner = bubbleSpawn.GetComponent<BubbleSpawner>();
+
+            maxPlayerHeight = gameManager.GetMaxPlayerHeight();
         lastPosition = _tr.position;
     }
     private void Update()
@@ -44,11 +51,12 @@ public class PlayerBehavior : MonoBehaviour
 
             if (isBouncing)
             {
-             //   HandleBounceMovement();
+                //   HandleBounceMovement();
             }
             else
             {
                 HandleMouseInput();
+                CheckMovementAndUpdateTrail();
             }
         }
     }
@@ -71,6 +79,20 @@ public class PlayerBehavior : MonoBehaviour
             isBouncing = true;
         }*/
     }
+    private void CheckMovementAndUpdateTrail()
+    {
+        float distance = Vector3.Distance(_tr.position, lastPosition);
+
+        if (distance > movementThreshold && bubbleSpawner != null)
+        {
+            bubbleSpawner.UpdatePlayerPosition(_tr.position);
+        }
+        else if (bubbleSpawner != null)
+        {
+            bubbleSpawner.StopBubbles();
+        }
+    }
+    
     /*
     private void HandleBounceMovement()
     {
@@ -107,7 +129,7 @@ public class PlayerBehavior : MonoBehaviour
         int fishValue;
 
         if (playGame)
-        {  
+        {
             if (collision.CompareTag("NetCollider"))
             {
                 Debug.Log("Collision with NetCollider detected.");
@@ -126,13 +148,19 @@ public class PlayerBehavior : MonoBehaviour
                 playerAppearance.PlayAnimation("PlayerEating");
                 Score.instance.UpdateScore(scoreAdd);
                 Destroy(collision.gameObject);
-            /*    FishMover fishMover = collision.gameObject.GetComponent<FishMover>();
-                if (fishMover != null)
-                {
-                    fishMover.IncreaseHorizontalSpeed(0.3f); 
-                }*/
+                /*    FishMover fishMover = collision.gameObject.GetComponent<FishMover>();
+                    if (fishMover != null)
+                    {
+                        fishMover.IncreaseHorizontalSpeed(0.3f); 
+                    }*/
                 deadManager.SpawnDeadFish(collision.gameObject.transform.position, scoreAdd);
             }
         }
     }
-}
+    public void ResumePlayer()
+    {
+        Debug.Log("PlayerMove");
+        playGame = true;
+        playerAppearance.PlayAnimation("PlayerMove");
+    }
+} 

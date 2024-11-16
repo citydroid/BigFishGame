@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject playerObject;
+    private PlayerBehavior playerBehavior;
+
     [SerializeField] private FishSpawner[] fishSpawner;
 
     [SerializeField] private GameObject gameOverPrefab;
@@ -39,28 +41,39 @@ public class GameManager : MonoBehaviour
     };
     private List<KeyValuePair<string, (int fishValue, int scoreAdd)>> fishValuesList;
 
+    private readonly List<(int scoreThreshold, int levelIndex)> backgroundLevelThresholds = new List<(int, int)>
+    {
+        (50, 1),
+        (1600, 2),
+        (3100, 3)
+     //   (2300, 4)
+    };
+    private int currentBackgroundLevel = 0;
+
     private readonly bool[] hasIncreasedSpawn = new bool[30];
     private int currentLevel = 0;
     private readonly List<LevelSettings> levelSettings = new List<LevelSettings>
     {
-        // 9f 
-        new LevelSettings(0, 0f, new[] { (1, 0.5f, 1, 2), (2, 1.5f, 1, 1) }),
+        // 9f 4.5f
+        new LevelSettings(0, 0.2f, new[] { (1, 0.5f, 1, 2), (2, 1.5f, 1, 1) }),
         new LevelSettings(10, 0.3f, new[] { (1, 1f, 1, 5), (3, 5f, 2, 2) }),
         new LevelSettings(20, 0.3f, new[] { (2, 10f, 1, 1), (3, 0.5f, 1, 3)}),
         new LevelSettings(40, 0.3f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 5f, 1,3), (5, 4f, 1, 5) }),
-        new LevelSettings(50, 0.3f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 0f, 0,3), (6, 1f, 1, 5) }),
-        new LevelSettings(90, 0.3f, new[] { (1, 0.5f, 3, 5), (2, 0f, 0, 0), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 10f, 1, 4), (7, 0.5f, 1, 1) }),
-        new LevelSettings(200, 0.3f, new[] { (1, 5f, 10, 6), (3, 1f, 1,4), (4, 1f, 1, 4), (6, 0f, 0, 0), (8, 1f, 1, 1) }),
-        new LevelSettings(400, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (9, 3f, 3, 5) }),
-        new LevelSettings(1000, 0.3f, new[] { (2, 2f, 1, 1), (3, 1f, 1, 4), (4, 1f, 1, 5), (10, 3f, 3, 4) }),
-        new LevelSettings(1600, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
-        new LevelSettings(2300, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) }),
-        new LevelSettings(3100, 0.3f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (5, 1f, 1, 2), (8, 3f, 3, 5) })
+        new LevelSettings(50, 0.3f, new[] { (1, 3f, 2, 5), (2, 3f, 1, 1), (3, 3f, 1, 3), (4, 0f, 0,3)}),
+        new LevelSettings(90, 0.3f, new[] { (1, 0.5f, 3, 5), (2, 0f, 0, 0), (3, 3f, 1, 4), (4, 1f, 1, 4), (5, 10f, 1, 4) }),
+        new LevelSettings(200, 0.5f, new[] { (1, 1.5f, 3, 6), (3, 1f, 1,4), (4, 1f, 1, 4), (5, 0f, 0, 4), (6, 1f, 1, 5), (7, 0.5f, 1, 1) }),
+        new LevelSettings(400, 0.5f, new[] { (3, 1f, 3, 3), (4, 1f, 1, 4), (6, 0f, 0, 5), (8, 1f, 3, 5) }),
+        new LevelSettings(1000, 0.5f, new[] { (1, 0.5f, 3, 5), (2, 2f, 1, 1), (3, 1f, 1, 4), (4, 1f, 1, 5), (9, 3f, 3, 5) }),
+        new LevelSettings(1600, 0.5f, new[] { (10, 3f, 1, 4) }),
+        new LevelSettings(2300, 0.5f, new[] { (10, 3f, 1, 4) }),
+        new LevelSettings(3100, 0.5f, new[] { (10, 3f, 1, 4) }),
+                new LevelSettings(4100, 0f, new[] { (10, 3f, 1, 4) })
     };
     private void Awake()
     {  
         InitializeFishValues();
         InitializeBackground();
+        InitializePlayer();
 
         Time.timeScale = 1.0f;
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -77,6 +90,10 @@ public class GameManager : MonoBehaviour
         {
             backgroundManager.Initialize(depthCoeff);
         }
+    }
+    private void InitializePlayer()
+    {
+        playerBehavior = playerObject.GetComponent<PlayerBehavior>();
     }
     private void InitializeFishSpawnerValues()
     {
@@ -98,6 +115,7 @@ public class GameManager : MonoBehaviour
         {
             int currentScore = Score.instance.GetScore();
             LevelProgressUpdate(currentScore);
+            BackgroundLevelUpdate(currentScore);
 
             if (currentScore >= fishValuesList[currentFishLevel].Value.fishValue)
                 FishLevelUpdate();
@@ -119,8 +137,17 @@ public class GameManager : MonoBehaviour
             currentLevel++;
         }
     }
-
-     private void FishLevelUpdate()
+    private void BackgroundLevelUpdate(int currentScore)
+    {
+        if (currentBackgroundLevel < backgroundLevelThresholds.Count &&
+            currentScore >= backgroundLevelThresholds[currentBackgroundLevel].scoreThreshold)
+        {
+            int level = backgroundLevelThresholds[currentBackgroundLevel].levelIndex;
+            SetLevelToBackground(level);
+            currentBackgroundLevel++;
+        }
+    }
+    private void FishLevelUpdate()
      {
         Debug.Log("currentFishLevel  " + currentFishLevel);
         currentFishLevel++;
@@ -163,7 +190,8 @@ public class GameManager : MonoBehaviour
             gameOverInstance = null;
             Time.timeScale = 1;
             gameOver = false;
-            gameMusic?.Play();
+           // gameMusic?.Play();
+            playerBehavior.ResumePlayer();
         }
     }
     public void Replay()
@@ -187,6 +215,10 @@ public class GameManager : MonoBehaviour
     private void BackgroundMove(float distance)
     {
         backgroundManager.MoveBackground(distance); 
+    }
+    private void SetLevelToBackground(int level)
+    {
+        backgroundManager.SetLevelToSpawn(level);
     }
 }
 

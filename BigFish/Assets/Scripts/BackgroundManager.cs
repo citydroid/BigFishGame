@@ -81,4 +81,9 @@ public class BackgroundManager : MonoBehaviour
     {
         depthCoeff = newDepthCoeff;
     }
+    public void SetLevelToSpawn(int level)
+    {
+        groundSpawner1.SetLevel(level);
+        groundSpawner2.SetLevel(level);
+    }
 }

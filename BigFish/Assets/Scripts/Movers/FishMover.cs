@@ -92,7 +92,7 @@ namespace Movers
             }
         }
             // Публичный метод для изменения вертикальной скорости
-            public void SetVerticalSpeed(float verticalSpeed)
+        public void SetVerticalSpeed(float verticalSpeed)
         {
             _verticalSpeed = verticalSpeed;
         }
